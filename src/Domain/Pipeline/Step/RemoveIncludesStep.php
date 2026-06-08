@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Pipeline\Step;
+namespace SmartAutoloadConverter\Domain\Pipeline\Step;
 
-use App\Domain\Conversion\Service\IncludeRemover;
-use App\Domain\FileSystem\Service\FileWriter;
-use App\Domain\Pipeline\Contract\PipelineStepInterface;
-use App\Domain\Pipeline\Model\PipelineContext;
-use App\Domain\Pipeline\Model\PipelineStepStatus;
-use App\Domain\Pipeline\Model\StepResult;
+use SmartAutoloadConverter\Domain\Conversion\Service\IncludeRemover;
+use SmartAutoloadConverter\Domain\FileSystem\Service\FileWriter;
+use SmartAutoloadConverter\Domain\Pipeline\Contract\PipelineStepInterface;
+use SmartAutoloadConverter\Domain\Pipeline\Model\PipelineContext;
+use SmartAutoloadConverter\Domain\Pipeline\Model\PipelineStepStatus;
+use SmartAutoloadConverter\Domain\Pipeline\Model\StepResult;
 
 /**
  * Step 3: Remove include/require statements for class files.

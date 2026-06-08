@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\FileSystem\Model;
+namespace SmartAutoloadConverter\Domain\FileSystem\Model;
 
 readonly class ScannedFile
 {

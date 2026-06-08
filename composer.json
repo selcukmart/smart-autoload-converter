@@ -1,71 +1,52 @@
 {
   "name": "selcukmart/smart-autoload-converter",
   "description": "Convert legacy PHP projects from include/require to PSR-4 autoloading",
-  "type": "project",
+  "type": "library",
   "license": "MIT",
+  "keywords": ["php", "psr-4", "autoloading", "migration", "legacy", "namespace", "converter"],
+  "homepage": "https://github.com/selcukmart/smart-autoload-converter",
+  "authors": [
+    {
+      "name": "Selcuk Mart",
+      "homepage": "https://github.com/selcukmart"
+    }
+  ],
   "minimum-stability": "stable",
   "prefer-stable": true,
   "require": {
     "php": ">=8.5",
-    "ext-ctype": "*",
-    "ext-iconv": "*",
     "ext-zip": "*",
+    "psr/log": "^3.0",
     "symfony/console": "7.4.*",
-    "symfony/dotenv": "7.4.*",
     "symfony/finder": "7.4.*",
-    "symfony/framework-bundle": "7.4.*",
-    "symfony/runtime": "7.4.*",
     "symfony/yaml": "7.4.*"
   },
   "require-dev": {
     "phpunit/phpunit": "^12.0",
     "symfony/var-dumper": "7.4.*"
   },
+  "bin": [
+    "bin/smart-autoload-converter"
+  ],
+  "autoload": {
+    "psr-4": {
+      "SmartAutoloadConverter\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "SmartAutoloadConverter\\Tests\\": "tests/"
+    }
+  },
   "config": {
-    "allow-plugins": {
-      "symfony/flex": true,
-      "symfony/runtime": true
-    },
     "optimize-autoloader": true,
     "preferred-install": {
       "*": "dist"
     },
     "sort-packages": true
   },
-  "autoload": {
-    "psr-4": {
-      "App\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "App\\Tests\\": "tests/"
-    }
-  },
-  "replace": {
-    "symfony/polyfill-ctype": "*",
-    "symfony/polyfill-iconv": "*",
-    "symfony/polyfill-php72": "*",
-    "symfony/polyfill-php73": "*",
-    "symfony/polyfill-php74": "*",
-    "symfony/polyfill-php80": "*",
-    "symfony/polyfill-php81": "*",
-    "symfony/polyfill-php82": "*",
-    "symfony/polyfill-php83": "*",
-    "symfony/polyfill-php84": "*",
-    "symfony/polyfill-php85": "*"
-  },
   "scripts": {
     "test": "phpunit --no-coverage",
     "test:coverage": "phpunit"
-  },
-  "conflict": {
-    "symfony/symfony": "*"
-  },
-  "extra": {
-    "symfony": {
-      "allow-contrib": false,
-      "require": "7.4.*"
-    }
   }
 }

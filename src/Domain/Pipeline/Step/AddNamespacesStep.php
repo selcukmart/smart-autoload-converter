@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Pipeline\Step;
+namespace SmartAutoloadConverter\Domain\Pipeline\Step;
 
-use App\Domain\Conversion\Service\ClassReferenceReplacer;
-use App\Domain\FileSystem\Service\FileWriter;
-use App\Domain\Pipeline\Contract\PipelineStepInterface;
-use App\Domain\Pipeline\Model\PipelineContext;
-use App\Domain\Pipeline\Model\PipelineStepStatus;
-use App\Domain\Pipeline\Model\StepResult;
+use SmartAutoloadConverter\Domain\Conversion\Service\ClassReferenceReplacer;
+use SmartAutoloadConverter\Domain\FileSystem\Service\FileWriter;
+use SmartAutoloadConverter\Domain\Pipeline\Contract\PipelineStepInterface;
+use SmartAutoloadConverter\Domain\Pipeline\Model\PipelineContext;
+use SmartAutoloadConverter\Domain\Pipeline\Model\PipelineStepStatus;
+use SmartAutoloadConverter\Domain\Pipeline\Model\StepResult;
 
 /**
  * Step 6: Add namespace declarations and use statements to class files.

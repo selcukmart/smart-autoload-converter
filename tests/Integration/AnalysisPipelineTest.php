@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Integration;
+namespace SmartAutoloadConverter\Tests\Integration;
 
-use App\Domain\Analysis\Service\ClassAnalyzer;
-use App\Domain\Analysis\Service\DependencyGraphBuilder;
-use App\Domain\Conversion\Service\ClassNameTransformer;
-use App\Domain\FileSystem\Service\FileScanner;
-use App\Domain\FileSystem\Service\FileWriter;
-use App\Domain\Regex\ClassUsagePatterns;
-use App\Domain\Regex\IncludeRequirePatterns;
+use SmartAutoloadConverter\Domain\Analysis\Service\ClassAnalyzer;
+use SmartAutoloadConverter\Domain\Analysis\Service\DependencyGraphBuilder;
+use SmartAutoloadConverter\Domain\Conversion\Service\ClassNameTransformer;
+use SmartAutoloadConverter\Domain\FileSystem\Service\FileScanner;
+use SmartAutoloadConverter\Domain\FileSystem\Service\FileWriter;
+use SmartAutoloadConverter\Domain\Regex\ClassUsagePatterns;
+use SmartAutoloadConverter\Domain\Regex\IncludeRequirePatterns;
 use PHPUnit\Framework\TestCase;
 
 /**

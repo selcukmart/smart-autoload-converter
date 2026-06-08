@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Pipeline\Step;
+namespace SmartAutoloadConverter\Domain\Pipeline\Step;
 
-use App\Domain\Analysis\Service\ClassAnalyzer;
-use App\Domain\Analysis\Service\DependencyGraphBuilder;
-use App\Domain\Conversion\Model\ConversionRule;
-use App\Domain\Conversion\Service\ClassNameTransformer;
-use App\Domain\FileSystem\Service\FileScanner;
-use App\Domain\FileSystem\Service\FileWriter;
-use App\Domain\Pipeline\Contract\PipelineStepInterface;
-use App\Domain\Pipeline\Model\PipelineContext;
-use App\Domain\Pipeline\Model\PipelineStepStatus;
-use App\Domain\Pipeline\Model\StepResult;
+use SmartAutoloadConverter\Domain\Analysis\Service\ClassAnalyzer;
+use SmartAutoloadConverter\Domain\Analysis\Service\DependencyGraphBuilder;
+use SmartAutoloadConverter\Domain\Conversion\Model\ConversionRule;
+use SmartAutoloadConverter\Domain\Conversion\Service\ClassNameTransformer;
+use SmartAutoloadConverter\Domain\FileSystem\Service\FileScanner;
+use SmartAutoloadConverter\Domain\FileSystem\Service\FileWriter;
+use SmartAutoloadConverter\Domain\Pipeline\Contract\PipelineStepInterface;
+use SmartAutoloadConverter\Domain\Pipeline\Model\PipelineContext;
+use SmartAutoloadConverter\Domain\Pipeline\Model\PipelineStepStatus;
+use SmartAutoloadConverter\Domain\Pipeline\Model\StepResult;
 
 /**
  * Step 1: Scan all PHP files, analyze class definitions, includes, and usages.

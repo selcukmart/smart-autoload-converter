@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\FileSystem\Exception;
+namespace SmartAutoloadConverter\Domain\FileSystem\Exception;
 
 class FileSystemException extends \RuntimeException
 {

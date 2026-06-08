@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Conversion\Model;
+namespace SmartAutoloadConverter\Domain\Conversion\Model;
 
 /**
  * Value Object: Result of a conversion operation on a single file.

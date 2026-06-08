@@ -5,15 +5,15 @@
 
 COMPOSE = docker compose
 APP     = $(COMPOSE) exec app
-PHP     = $(APP) php
+CLI     = $(APP) php bin/smart-autoload-converter
 
-.PHONY: build up down restart test analyze convert init shell logs status clean help
+.PHONY: build up down restart test analyze dry-run convert init shell logs status clean help
 
 # =============================================================================
-# Core Commands
+# Core
 # =============================================================================
 
-## Build and start all containers
+## Build and start containers
 build:
 	$(COMPOSE) build
 	$(COMPOSE) up -d
@@ -21,14 +21,14 @@ build:
 	@echo ""
 	@echo "=== Smart Autoload Converter ==="
 	@$(APP) sh -c "php -v | /usr/bin/head -1"
-	@$(APP) php bin/console --version 2>/dev/null || true
+	@$(CLI) --version
 	@echo ""
 
-## Start containers (without rebuild)
+## Start containers
 up:
 	$(COMPOSE) up -d
 
-## Stop all containers
+## Stop containers
 down:
 	$(COMPOSE) down
 
@@ -36,52 +36,32 @@ down:
 restart: down up
 
 # =============================================================================
-# Development
+# Conversion (sample project pre-loaded at /workspace/input)
 # =============================================================================
 
 ## Run PHPUnit tests
 test:
-	$(PHP) vendor/bin/phpunit --no-coverage --colors=always
+	$(APP) php vendor/bin/phpunit --no-coverage --colors=always
 
-## Run tests with coverage
-test-coverage:
-	$(PHP) vendor/bin/phpunit --colors=always
-
-## Run analysis on /workspace/input (default: sample legacy project)
+## Analyze sample legacy project
 analyze:
-	$(PHP) bin/console smart:analyze
+	$(CLI) analyze -t /workspace/input
 
-## Dry-run conversion (preview only, no file changes)
+## Dry-run conversion
 dry-run:
-	$(PHP) bin/console smart:convert --dry-run
+	$(CLI) convert -t /workspace/input --export-path=/workspace/output --dry-run
 
-## Run full conversion
+## Full conversion
 convert:
-	$(PHP) bin/console smart:convert
+	$(CLI) convert -t /workspace/input --export-path=/workspace/output
 
-## Generate example config
+## Generate example YAML config
 init:
-	$(PHP) bin/console smart:init
+	$(CLI) init
 
-## Open a shell inside the app container
+## Enter container shell
 shell:
 	$(COMPOSE) exec app sh
-
-# =============================================================================
-# Composer
-# =============================================================================
-
-## Install composer dependencies
-composer-install:
-	$(APP) composer install --prefer-dist --no-interaction
-
-## Update composer dependencies
-composer-update:
-	$(APP) composer update --prefer-dist --no-interaction
-
-## Dump autoload
-composer-dump:
-	$(APP) composer dump-autoload --optimize
 
 # =============================================================================
 # Utilities
@@ -91,34 +71,30 @@ composer-dump:
 logs:
 	$(COMPOSE) logs -f app
 
-## Show container status
+## Show status
 status:
 	$(COMPOSE) ps
-	@echo ""
-	@$(APP) sh -c "php -v | /usr/bin/head -1" 2>/dev/null || echo "Containers not running"
+	@$(APP) sh -c "php -v | /usr/bin/head -1" 2>/dev/null || echo "Not running"
 
-## Remove containers, volumes, and build cache
+## Composer install
+composer-install:
+	$(APP) composer install --prefer-dist --no-interaction
+
+## Remove everything
 clean:
 	$(COMPOSE) down -v --rmi local --remove-orphans
 	@echo "Cleaned."
 
-## Clear Symfony cache
-cache-clear:
-	$(PHP) bin/console cache:clear
-
-# =============================================================================
-# Help
-# =============================================================================
-
-## Show this help
+## Show help
 help:
-	@echo ""
-	@echo "Smart Autoload Converter"
-	@echo "========================"
-	@echo ""
-	@echo "Usage: make <target>"
-	@echo ""
-	@grep -E '^## ' Makefile | sed 's/## /  /' | paste - <(grep -E '^[a-zA-Z_-]+:' Makefile | sed 's/:.*//' | sed 's/^/make /') | awk -F'\t' '{printf "  %-24s %s\n", $$2, $$1}'
-	@echo ""
+	@echo "make build     Build + start + install"
+	@echo "make test      Run PHPUnit (82 tests)"
+	@echo "make analyze   Analyze sample project"
+	@echo "make dry-run   Preview conversion"
+	@echo "make convert   Full conversion"
+	@echo "make init      Generate YAML config"
+	@echo "make shell     Enter container"
+	@echo "make down      Stop containers"
+	@echo "make clean     Remove everything"
 
 .DEFAULT_GOAL := help

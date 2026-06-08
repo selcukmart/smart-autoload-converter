@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Regex;
+namespace SmartAutoloadConverter\Domain\Regex;
 
 /**
  * Regex patterns for detecting PHP class definitions and usages.

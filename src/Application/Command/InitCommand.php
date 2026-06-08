@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Command;
+namespace SmartAutoloadConverter\Application\Command;
 
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'smart:init',
+    name: 'init',
     description: 'Generate an example YAML configuration file',
 )]
 class InitCommand extends Command
@@ -38,20 +38,20 @@ class InitCommand extends Command
 # Documentation: https://github.com/selcukmart/smart-autoload-converter
 
 source:
-    path: '/workspace/input'
+    path: './legacy-project'
 
 output:
-    path: '/workspace/output'
+    path: './converted-output'
 
 backup:
     enabled: true
     strategy: zip              # zip | copy
-    path: '/workspace/backups'
+    path: './backups'
 
 report:
     enabled: true
     format: console            # console | json | html
-    path: '/workspace/reports'
+    path: './reports'
 
 # Class naming rules
 class_naming:

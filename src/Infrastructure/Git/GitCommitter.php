@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Git;
+namespace SmartAutoloadConverter\Infrastructure\Git;
 
-use App\Domain\FileSystem\Exception\FileSystemException;
+use SmartAutoloadConverter\Domain\FileSystem\Exception\FileSystemException;
 
 /**
  * Auto-commits changes after each pipeline step (when enabled).

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Logger;
+namespace SmartAutoloadConverter\Infrastructure\Logger;
 
 use Psr\Log\AbstractLogger;
 use Psr\Log\LogLevel;

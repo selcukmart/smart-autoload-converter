@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Report\Service;
+namespace SmartAutoloadConverter\Domain\Report\Service;
 
-use App\Domain\Pipeline\Model\PipelineContext;
-use App\Domain\Pipeline\Model\StepResult;
-use App\Domain\Report\Model\ConversionReport;
+use SmartAutoloadConverter\Domain\Pipeline\Model\PipelineContext;
+use SmartAutoloadConverter\Domain\Pipeline\Model\StepResult;
+use SmartAutoloadConverter\Domain\Report\Model\ConversionReport;
 
 /**
  * Generates a ConversionReport from pipeline execution results.

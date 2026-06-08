@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Conversion\Service;
+namespace SmartAutoloadConverter\Domain\Conversion\Service;
 
-use App\Domain\Conversion\Model\ConversionResult;
-use App\Domain\Conversion\Model\ConversionRule;
-use App\Domain\Regex\ClassUsagePatterns;
+use SmartAutoloadConverter\Domain\Conversion\Model\ConversionResult;
+use SmartAutoloadConverter\Domain\Conversion\Model\ConversionRule;
+use SmartAutoloadConverter\Domain\Regex\ClassUsagePatterns;
 
 /**
  * Replaces all class references in file content with their new PSR-4 names.

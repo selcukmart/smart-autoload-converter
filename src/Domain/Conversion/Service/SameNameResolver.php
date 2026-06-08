@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Conversion\Service;
+namespace SmartAutoloadConverter\Domain\Conversion\Service;
 
-use App\Domain\Analysis\Model\DependencyGraph;
-use App\Domain\Analysis\Model\IncludeStatement;
+use SmartAutoloadConverter\Domain\Analysis\Model\DependencyGraph;
+use SmartAutoloadConverter\Domain\Analysis\Model\IncludeStatement;
 
 /**
  * Resolves ambiguous class names when multiple classes share the same short name.

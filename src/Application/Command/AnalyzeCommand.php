@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Command;
+namespace SmartAutoloadConverter\Application\Command;
 
-use App\Application\Service\ConfigurationLoader;
-use App\Domain\Analysis\Service\ClassAnalyzer;
-use App\Domain\Analysis\Service\DependencyGraphBuilder;
-use App\Domain\Conversion\Service\ClassNameTransformer;
-use App\Domain\FileSystem\Service\FileScanner;
-use App\Domain\FileSystem\Service\FileWriter;
+use SmartAutoloadConverter\Application\Service\ConfigurationLoader;
+use SmartAutoloadConverter\Domain\Analysis\Service\ClassAnalyzer;
+use SmartAutoloadConverter\Domain\Analysis\Service\DependencyGraphBuilder;
+use SmartAutoloadConverter\Domain\Conversion\Service\ClassNameTransformer;
+use SmartAutoloadConverter\Domain\FileSystem\Service\FileScanner;
+use SmartAutoloadConverter\Domain\FileSystem\Service\FileWriter;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'smart:analyze',
+    name: 'analyze',
     description: 'Analyze a legacy PHP project without making any changes',
 )]
 class AnalyzeCommand extends Command
@@ -36,7 +36,7 @@ class AnalyzeCommand extends Command
     {
         $this
             ->addOption('config', 'c', InputOption::VALUE_OPTIONAL, 'Path to YAML config file')
-            ->addOption('target-path', 't', InputOption::VALUE_OPTIONAL, 'Path to legacy project', '/workspace/input')
+            ->addOption('target-path', 't', InputOption::VALUE_REQUIRED, 'Path to legacy project')
             ->addOption('format', 'f', InputOption::VALUE_OPTIONAL, 'Output format: table, json', 'table')
         ;
     }

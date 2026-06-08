@@ -3,204 +3,151 @@
 [![PHP 8.5](https://img.shields.io/badge/PHP-8.5-blue.svg)](https://www.php.net/)
 [![Symfony 7.4 LTS](https://img.shields.io/badge/Symfony-7.4%20LTS-black.svg)](https://symfony.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/Tests-82%20passed-brightgreen.svg)](tests/)
 [![Docker](https://img.shields.io/badge/Docker-ready-2496ED.svg)](Dockerfile)
 
 Convert legacy PHP projects from `include/require` to **PSR-4 autoloading** — automatically.
 
-Born from a real migration of **6,669 PHP files**, **10,602 include/require statements**, and **4,087 class definitions** across a 1.6 million-line legacy codebase. Now open-sourced as a generic tool any PHP developer can use.
+Born from a real migration of **6,669 PHP files**, **10,602 include/require statements**, and **4,087 class definitions** across a 1.6 million-line legacy codebase. Now open-sourced as a generic tool.
 
 ## What It Does
 
 ```
-BEFORE                              AFTER
-├── include/                        ├── src/
-│   └── MyLib/                      │   └── MyLib/
-│       └── User/                   │       └── User/
-│           └── MyLib_user_construct.php    └── User.php ← namespaced
-│                                           namespace MyLib\User;
-include_once 'include/...';         use MyLib\User\User;
-$u = new MyLib_user_construct();    $u = new User();
+BEFORE                                    AFTER
+├── include/                              ├── src/
+│   └── MyLib/User/                       │   └── MyLib/User/
+│       └── MyLib_user_construct.php      │       └── User.php
+│           class MyLib_user_construct     │           namespace MyLib\User;
+│                                         │           class User
+include_once 'include/.../User.php';      use MyLib\User\User;
+$u = new MyLib_user_construct();          $u = new User();
 ```
 
 ## Features
 
-- **8-step pipeline**: Analyze → Backup → Remove includes → Replace references → Rename files → Add namespaces → Update composer.json → Dump autoload
+- **9-step pipeline**: Analyze, Backup, Prepare Output, Remove includes, Replace references, Rename files, Add namespaces, Update composer.json, Dump autoload
 - **Dry-run mode**: Preview all changes before applying
-- **10 regex patterns**: Handles `new`, `::`, `extends`, `implements`, `instanceof`, `catch`, function params, return types, and more
-- **Reserved word safety**: Automatically renames `Abstract` → `Abstracts`, `Interface` → `Interfaces`, etc.
-- **Duplicate name detection**: Flags classes with the same short name in different directories
-- **YAML configuration**: No hardcoded paths or project-specific logic
-- **Reports**: Console table, JSON, or HTML output
-- **Backup**: Zip or copy strategy before any changes
+- **Source stays untouched**: Output is a separate converted copy
+- **10 regex patterns**: `new`, `::`, `extends`, `implements`, `instanceof`, `catch`, function params, return types
+- **Reserved word safety**: `Abstract` → `Abstracts`, `Interface` → `Interfaces`, `List` → `Lists`
+- **Duplicate name detection**: Flags classes with the same short name
+- **YAML configuration**: Fully configurable, no hardcoded paths
+- **Reports**: Console, JSON, and HTML output
+- **Standalone CLI**: No Symfony project required — works via `composer require`
 
-## Quick Start (Docker)
-
-The fastest way: Docker image comes with a sample legacy project ready to go.
+## Install
 
 ```bash
-# 1. Clone and start
+composer require selcukmart/smart-autoload-converter
+```
+
+## Usage
+
+```bash
+# Analyze a legacy project
+vendor/bin/smart-autoload-converter analyze -t /path/to/legacy-project
+
+# Preview conversion (dry-run)
+vendor/bin/smart-autoload-converter convert -t /path/to/legacy-project --dry-run
+
+# Full conversion
+vendor/bin/smart-autoload-converter convert -t /path/to/legacy-project --export-path=./output
+
+# Generate config file
+vendor/bin/smart-autoload-converter init
+
+# Convert with config
+vendor/bin/smart-autoload-converter convert -c smart_autoload.yaml -t ./legacy --export-path=./output
+
+# Save report as HTML
+vendor/bin/smart-autoload-converter convert -t ./legacy --report=html --report-output=report.html
+```
+
+## Docker (with sample project)
+
+```bash
 git clone https://github.com/selcukmart/smart-autoload-converter.git
 cd smart-autoload-converter
-make build
 
-# 2. Analyze the sample project (works immediately, no config needed)
-make analyze
-
-# 3. Preview conversion (dry-run, no files changed)
-make dry-run
-
-# 4. Run full conversion
-make convert
-
-# 5. Run tests
-make test
-
-# 6. Enter container shell for manual commands
-make shell
+make build       # Build + start + install
+make test        # 82 tests, all green
+make analyze     # Analyze sample project
+make dry-run     # Preview (9/9 steps OK)
+make convert     # Full conversion
+make shell       # Enter container
+make down        # Stop
 ```
 
-### Container Shell Commands
+## Pipeline (9 Steps)
 
-Inside the container (`make shell`), all commands work with zero configuration:
+| # | Step | What it does |
+|---|------|-------------|
+| 1 | `analyze` | Scan PHP files, build dependency graph, generate conversion rules |
+| 2 | `backup` | Create zip/copy backup of the source |
+| 3 | `prepare_output` | Copy source to output directory (source stays untouched) |
+| 4 | `remove_includes` | Remove include/require for class files |
+| 5 | `replace_references` | Update `new`, `extends`, `instanceof`, `::`, etc. |
+| 6 | `rename_files` | Move files to PSR-4 directory structure |
+| 7 | `add_namespaces` | Add `namespace` + `use` statements, rename class definitions |
+| 8 | `generate_composer` | Create/update `composer.json` with PSR-4 autoload |
+| 9 | `composer_dump` | Run `composer dump-autoload --optimize` |
 
-```bash
-php bin/console smart:analyze              # Analyze /workspace/input
-php bin/console smart:convert --dry-run    # Preview conversion
-php bin/console smart:convert              # Full conversion → /workspace/output
-php bin/console smart:init                 # Generate YAML config file
-php bin/console smart:analyze -f json      # JSON output
+## Architecture
+
 ```
-
-Custom project? Mount it to `/workspace/input`:
-
-```bash
-# From macOS host:
-cp -r /path/to/my-legacy-project/* workspace/input/
-make analyze
-make convert
-```
-
-## Quick Start (Standalone)
-
-```bash
-# 1. Install
-composer require selcukmart/smart-autoload-converter
-
-# 2. Analyze
-php bin/console smart:analyze -t /path/to/legacy-project
-
-# 3. Convert
-php bin/console smart:convert -t /path/to/legacy-project --export-path=/path/to/output
+SmartAutoloadConverter\
+├── Domain/
+│   ├── Analysis/       ClassAnalyzer, DependencyGraph, FileAnalysis
+│   ├── Conversion/     ClassNameTransformer, ClassReferenceReplacer, IncludeRemover
+│   ├── FileSystem/     FileScanner, FileWriter, BackupManager
+│   ├── Pipeline/       Pipeline engine + 9 configurable steps
+│   ├── Regex/          Battle-tested patterns (regex101 verified)
+│   └── Report/         ConversionReport + JSON/HTML/Console exporters
+├── Application/        CLI commands (analyze, convert, init, report)
+└── Infrastructure/     ComposerJsonEditor, ComposerDumper, GitCommitter
 ```
 
 ## Configuration
 
 ```yaml
-# smart_autoload.yaml (generated by: php bin/console smart:init)
+# smart_autoload.yaml (generate with: smart-autoload-converter init)
 source:
-    path: '/workspace/input'
+    path: './legacy-project'
 output:
-    path: '/workspace/output'
-
+    path: './converted-output'
 class_naming:
     separator: '_'
     transforms:
-        construct: ''    # MyLib_user_construct → MyLib\User\User
-        index: ''        # MyLib_page_index → MyLib\Page\Page
+        construct: ''
     reserved_word_fixes:
         Abstract: Abstracts
         Interface: Interfaces
-        List: Lists
-
 backup:
     enabled: true
     strategy: zip
-
-includes:
-    remove_class_includes: true
-    preserve:
-        - vendor/autoload.php
-
 pipeline:
     stop_on_error: true
 ```
 
-## Architecture
-
-Clean DDD architecture with clear separation of concerns:
-
-```
-src/
-├── Domain/
-│   ├── Analysis/       ClassAnalyzer, DependencyGraph, FileAnalysis
-│   ├── Conversion/     ClassNameTransformer, ClassReferenceReplacer, IncludeRemover
-│   ├── FileSystem/     FileScanner, FileWriter, BackupManager
-│   ├── Pipeline/       Pipeline engine + 8 configurable steps
-│   ├── Regex/          Battle-tested patterns (regex101 verified)
-│   └── Report/         ConversionReport + JSON/HTML/Console exporters
-├── Application/        CLI commands (smart:convert, smart:analyze, smart:init)
-└── Infrastructure/     ComposerJsonEditor, ComposerDumper, ConversionLogger
-```
-
-## Pipeline Steps
-
-| # | Step | What it does |
-|---|------|-------------|
-| 1 | `analyze` | Scans all PHP files, builds dependency graph, generates conversion rules |
-| 2 | `backup` | Creates zip/copy backup of the source project |
-| 3 | `remove_includes` | Removes include/require for class files (autoloading replaces them) |
-| 4 | `replace_references` | Updates all class usages: `new`, `extends`, `instanceof`, `::`, etc. |
-| 5 | `rename_files` | Moves files to PSR-4 directory structure |
-| 6 | `add_namespaces` | Adds `namespace` declarations and `use` statements |
-| 7 | `generate_composer` | Updates `composer.json` with PSR-4 autoload entries |
-| 8 | `composer_dump` | Runs `composer dump-autoload --optimize` |
-
-Run specific steps: `php bin/console smart:convert --steps=analyze,backup,remove_includes`
-
-## Commands
-
-| Command | Description |
-|---------|------------|
-| `smart:convert` | Run the full conversion pipeline |
-| `smart:analyze` | Analyze only (no file changes) |
-| `smart:init` | Generate example YAML config |
-
 ## Testing
 
 ```bash
-# Run all tests
-vendor/bin/phpunit
-
-# Run specific test suite
-vendor/bin/phpunit tests/Domain/
-vendor/bin/phpunit tests/Integration/
-```
-
-## Docker
-
-```bash
-make build        # Build + start + install deps
-make test         # Run all tests
-make analyze      # Analyze sample project
-make dry-run      # Preview conversion
-make convert      # Full conversion
-make shell        # Enter container
-make down         # Stop
-make clean        # Remove everything
-make help         # All available targets
+vendor/bin/phpunit                  # All tests
+vendor/bin/phpunit tests/Domain/    # Unit tests only
+vendor/bin/phpunit tests/Integration/  # Integration tests
 ```
 
 ## Origin Story
 
-This tool was built in 2022 to modernize a real production PHP application with 1.6 million lines of code, zero namespaces, and thousands of `include_once` statements. The original tool (51 files, 5,226 lines) successfully converted the entire codebase in 2 months.
+Built in 2022 to modernize a 1.6M-line legacy PHP application. The original tool (51 files, 5,226 lines) converted 6,669 PHP files in 2 months. Read more: [Medium](https://medium.com/@martselcuk)
 
-Read the full story: [Medium: 1.6 Million Lines, Zero Namespaces](https://medium.com/@martselcuk)
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-MIT License. See [LICENSE](LICENSE) for details.
+MIT. See [LICENSE](LICENSE).
 
 ## Author
 
-**Selcuk Mart** — [GitHub](https://github.com/selcukmart) | [Medium](https://medium.com/@martselcuk)
+**Selcuk Mart** - [GitHub](https://github.com/selcukmart) | [Medium](https://medium.com/@martselcuk)

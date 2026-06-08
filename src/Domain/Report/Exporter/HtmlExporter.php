@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Report\Exporter;
+namespace SmartAutoloadConverter\Domain\Report\Exporter;
 
-use App\Domain\Report\Model\ConversionReport;
+use SmartAutoloadConverter\Domain\Report\Model\ConversionReport;
 
 class HtmlExporter implements ReportExporterInterface
 {

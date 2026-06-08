@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Pipeline\Step;
+namespace SmartAutoloadConverter\Domain\Pipeline\Step;
 
-use App\Infrastructure\Composer\ComposerJsonEditor;
-use App\Domain\Pipeline\Contract\PipelineStepInterface;
-use App\Domain\Pipeline\Model\PipelineContext;
-use App\Domain\Pipeline\Model\PipelineStepStatus;
-use App\Domain\Pipeline\Model\StepResult;
+use SmartAutoloadConverter\Infrastructure\Composer\ComposerJsonEditor;
+use SmartAutoloadConverter\Domain\Pipeline\Contract\PipelineStepInterface;
+use SmartAutoloadConverter\Domain\Pipeline\Model\PipelineContext;
+use SmartAutoloadConverter\Domain\Pipeline\Model\PipelineStepStatus;
+use SmartAutoloadConverter\Domain\Pipeline\Model\StepResult;
 
 /**
  * Step 7: Update composer.json with PSR-4 autoload entries.

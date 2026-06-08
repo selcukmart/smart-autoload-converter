@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\FileSystem\Service;
+namespace SmartAutoloadConverter\Domain\FileSystem\Service;
 
-use App\Domain\FileSystem\Exception\FileSystemException;
+use SmartAutoloadConverter\Domain\FileSystem\Exception\FileSystemException;
 
 /**
  * Handles writing file content with atomic write support.

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Analysis\Service;
+namespace SmartAutoloadConverter\Domain\Analysis\Service;
 
-use App\Domain\Analysis\Model\ClassDefinition;
-use App\Domain\Analysis\Model\ClassType;
-use App\Domain\Analysis\Model\FileAnalysis;
-use App\Domain\Regex\ClassUsagePatterns;
-use App\Domain\Regex\IncludeRequirePatterns;
+use SmartAutoloadConverter\Domain\Analysis\Model\ClassDefinition;
+use SmartAutoloadConverter\Domain\Analysis\Model\ClassType;
+use SmartAutoloadConverter\Domain\Analysis\Model\FileAnalysis;
+use SmartAutoloadConverter\Domain\Regex\ClassUsagePatterns;
+use SmartAutoloadConverter\Domain\Regex\IncludeRequirePatterns;
 
 /**
  * Scans PHP file content and extracts class definitions, namespace info,

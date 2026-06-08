@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Domain\Analysis;
+namespace SmartAutoloadConverter\Tests\Domain\Analysis;
 
-use App\Domain\Analysis\Model\ClassDefinition;
-use App\Domain\Analysis\Model\ClassType;
-use App\Domain\Analysis\Model\DependencyGraph;
-use App\Domain\Analysis\Model\FileAnalysis;
-use App\Domain\Analysis\Model\IncludeStatement;
-use App\Domain\Analysis\Model\IncludeType;
+use SmartAutoloadConverter\Domain\Analysis\Model\ClassDefinition;
+use SmartAutoloadConverter\Domain\Analysis\Model\ClassType;
+use SmartAutoloadConverter\Domain\Analysis\Model\DependencyGraph;
+use SmartAutoloadConverter\Domain\Analysis\Model\FileAnalysis;
+use SmartAutoloadConverter\Domain\Analysis\Model\IncludeStatement;
+use SmartAutoloadConverter\Domain\Analysis\Model\IncludeType;
 use PHPUnit\Framework\TestCase;
 
 class DependencyGraphTest extends TestCase

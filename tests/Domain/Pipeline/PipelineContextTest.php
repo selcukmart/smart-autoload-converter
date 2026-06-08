@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Domain\Pipeline;
+namespace SmartAutoloadConverter\Tests\Domain\Pipeline;
 
-use App\Domain\Analysis\Model\DependencyGraph;
-use App\Domain\Conversion\Model\ConversionRule;
-use App\Domain\Pipeline\Model\PipelineContext;
+use SmartAutoloadConverter\Domain\Analysis\Model\DependencyGraph;
+use SmartAutoloadConverter\Domain\Conversion\Model\ConversionRule;
+use SmartAutoloadConverter\Domain\Pipeline\Model\PipelineContext;
 use PHPUnit\Framework\TestCase;
 
 class PipelineContextTest extends TestCase

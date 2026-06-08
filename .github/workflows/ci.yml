@@ -8,11 +8,9 @@ on:
 
 jobs:
   tests:
-    name: PHP ${{ matrix.php }} Tests
+    name: Tests (PHP ${{ matrix.php }})
     runs-on: ubuntu-latest
-
     strategy:
-      fail-fast: false
       matrix:
         php: ['8.5']
 
@@ -23,7 +21,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: zip, mbstring, intl
+          extensions: zip
           coverage: none
 
       - name: Install dependencies
@@ -32,18 +30,25 @@ jobs:
       - name: Run tests
         run: vendor/bin/phpunit --no-coverage
 
+      - name: Verify CLI
+        run: |
+          php bin/smart-autoload-converter list
+          php bin/smart-autoload-converter analyze -t fixtures/legacy-sample-project
+          php bin/smart-autoload-converter convert -t fixtures/legacy-sample-project --export-path=/tmp/out --dry-run
+
   docker:
     name: Docker Build + Test
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build dev image
-        run: docker build --target dev -t smart-autoload-converter:test .
+      - name: Build
+        run: docker build --target dev -t sac:test .
 
-      - name: Run tests in Docker
-        run: docker run --rm smart-autoload-converter:test php vendor/bin/phpunit --no-coverage --colors=never
+      - name: Test
+        run: docker run --rm sac:test php vendor/bin/phpunit --no-coverage
 
-      - name: Verify CLI commands
-        run: docker run --rm smart-autoload-converter:test php bin/console list smart
+      - name: CLI smoke test
+        run: |
+          docker run --rm sac:test php bin/smart-autoload-converter analyze -t /workspace/input
+          docker run --rm sac:test php bin/smart-autoload-converter convert -t /workspace/input --export-path=/tmp/out --dry-run

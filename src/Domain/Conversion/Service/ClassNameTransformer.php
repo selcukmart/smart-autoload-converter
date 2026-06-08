@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Conversion\Service;
+namespace SmartAutoloadConverter\Domain\Conversion\Service;
 
-use App\Domain\Conversion\Model\ConversionRule;
+use SmartAutoloadConverter\Domain\Conversion\Model\ConversionRule;
 
 /**
  * Transforms underscore-separated legacy class names into PSR-4 namespace + class.

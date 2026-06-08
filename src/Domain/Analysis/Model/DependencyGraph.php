@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Analysis\Model;
+namespace SmartAutoloadConverter\Domain\Analysis\Model;
 
 /**
  * Aggregate: Maps every file's analysis and class relationships.

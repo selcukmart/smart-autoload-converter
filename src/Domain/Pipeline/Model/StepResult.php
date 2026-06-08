@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Pipeline\Model;
+namespace SmartAutoloadConverter\Domain\Pipeline\Model;
 
 readonly class StepResult
 {

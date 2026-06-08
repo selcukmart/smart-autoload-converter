@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Pipeline\Model;
+namespace SmartAutoloadConverter\Domain\Pipeline\Model;
 
-use App\Domain\Analysis\Model\DependencyGraph;
-use App\Domain\Conversion\Model\ConversionRule;
+use SmartAutoloadConverter\Domain\Analysis\Model\DependencyGraph;
+use SmartAutoloadConverter\Domain\Conversion\Model\ConversionRule;
 
 /**
  * Mutable context object passed through all pipeline steps.

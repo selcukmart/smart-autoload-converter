@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\FileSystem\Service;
+namespace SmartAutoloadConverter\Domain\FileSystem\Service;
 
-use App\Domain\FileSystem\Model\ScannedFile;
+use SmartAutoloadConverter\Domain\FileSystem\Model\ScannedFile;
 use Symfony\Component\Finder\Finder;
 
 /**

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Service;
+namespace SmartAutoloadConverter\Application\Service;
 
-use App\Domain\Pipeline\Model\PipelineContext;
-use App\Domain\Pipeline\Model\StepResult;
-use App\Domain\Pipeline\Service\Pipeline;
+use SmartAutoloadConverter\Domain\Pipeline\Model\PipelineContext;
+use SmartAutoloadConverter\Domain\Pipeline\Model\StepResult;
+use SmartAutoloadConverter\Domain\Pipeline\Service\Pipeline;
 use Psr\Log\LoggerInterface;
 
 /**

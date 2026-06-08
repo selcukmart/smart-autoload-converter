@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Conversion\Service;
+namespace SmartAutoloadConverter\Domain\Conversion\Service;
 
 /**
  * Fixes PHP reserved words that cannot be used as namespace segments or class names.

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Domain\FileSystem;
+namespace SmartAutoloadConverter\Tests\Domain\FileSystem;
 
-use App\Domain\FileSystem\Service\FileScanner;
+use SmartAutoloadConverter\Domain\FileSystem\Service\FileScanner;
 use PHPUnit\Framework\TestCase;
 
 class FileScannerTest extends TestCase

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Analysis\Service;
+namespace SmartAutoloadConverter\Domain\Analysis\Service;
 
-use App\Domain\Analysis\Model\DependencyGraph;
-use App\Domain\FileSystem\Model\ScannedFile;
-use App\Domain\FileSystem\Service\FileWriter;
+use SmartAutoloadConverter\Domain\Analysis\Model\DependencyGraph;
+use SmartAutoloadConverter\Domain\FileSystem\Model\ScannedFile;
+use SmartAutoloadConverter\Domain\FileSystem\Service\FileWriter;
 
 /**
  * Orchestrates file scanning + analysis to build a complete DependencyGraph.

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Domain\Analysis;
+namespace SmartAutoloadConverter\Tests\Domain\Analysis;
 
-use App\Domain\Analysis\Model\ClassType;
-use App\Domain\Analysis\Service\ClassAnalyzer;
-use App\Domain\Regex\ClassUsagePatterns;
-use App\Domain\Regex\IncludeRequirePatterns;
+use SmartAutoloadConverter\Domain\Analysis\Model\ClassType;
+use SmartAutoloadConverter\Domain\Analysis\Service\ClassAnalyzer;
+use SmartAutoloadConverter\Domain\Regex\ClassUsagePatterns;
+use SmartAutoloadConverter\Domain\Regex\IncludeRequirePatterns;
 use PHPUnit\Framework\TestCase;
 
 class ClassAnalyzerTest extends TestCase

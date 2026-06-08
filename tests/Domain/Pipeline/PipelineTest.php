@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Domain\Pipeline;
+namespace SmartAutoloadConverter\Tests\Domain\Pipeline;
 
-use App\Domain\Pipeline\Contract\PipelineStepInterface;
-use App\Domain\Pipeline\Model\PipelineContext;
-use App\Domain\Pipeline\Model\PipelineStepStatus;
-use App\Domain\Pipeline\Model\StepResult;
-use App\Domain\Pipeline\Service\Pipeline;
+use SmartAutoloadConverter\Domain\Pipeline\Contract\PipelineStepInterface;
+use SmartAutoloadConverter\Domain\Pipeline\Model\PipelineContext;
+use SmartAutoloadConverter\Domain\Pipeline\Model\PipelineStepStatus;
+use SmartAutoloadConverter\Domain\Pipeline\Model\StepResult;
+use SmartAutoloadConverter\Domain\Pipeline\Service\Pipeline;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Service;
+namespace SmartAutoloadConverter\Application\Service;
 
 use Symfony\Component\Yaml\Yaml;
 
@@ -14,10 +14,10 @@ class ConfigurationLoader
     private const REQUIRED_KEYS = ['source'];
 
     private const DEFAULTS = [
-        'source' => ['path' => '/workspace/input'],
-        'output' => ['path' => '/workspace/output'],
-        'backup' => ['enabled' => true, 'strategy' => 'zip', 'path' => '/workspace/backups'],
-        'report' => ['enabled' => true, 'format' => 'console', 'path' => '/workspace/reports'],
+        'source' => ['path' => './legacy-project'],
+        'output' => ['path' => './converted-output'],
+        'backup' => ['enabled' => true, 'strategy' => 'zip', 'path' => './backups'],
+        'report' => ['enabled' => true, 'format' => 'console', 'path' => './reports'],
         'class_naming' => ['separator' => '_', 'transforms' => [], 'reserved_word_fixes' => [
             'Abstract' => 'Abstracts',
             'Interface' => 'Interfaces',

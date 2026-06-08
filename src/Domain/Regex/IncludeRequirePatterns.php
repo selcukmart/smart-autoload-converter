@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Regex;
+namespace SmartAutoloadConverter\Domain\Regex;
 
-use App\Domain\Analysis\Model\IncludeStatement;
-use App\Domain\Analysis\Model\IncludeType;
+use SmartAutoloadConverter\Domain\Analysis\Model\IncludeStatement;
+use SmartAutoloadConverter\Domain\Analysis\Model\IncludeType;
 
 /**
  * Regex patterns for detecting and parsing PHP include/require statements.

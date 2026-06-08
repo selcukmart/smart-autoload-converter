@@ -1,0 +1,106 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Smart Autoload Converter - Standalone CLI Entry Point
+ *
+ * Usage:
+ *   vendor/bin/smart-autoload-converter analyze -t /path/to/legacy
+ *   vendor/bin/smart-autoload-converter convert -t /path/to/legacy --dry-run
+ *   vendor/bin/smart-autoload-converter init
+ *   vendor/bin/smart-autoload-converter report result.json -f html
+ */
+
+// Find autoloader
+$autoloadPaths = [
+    __DIR__ . '/../vendor/autoload.php',       // standalone / development
+    __DIR__ . '/../../../autoload.php',         // installed as dependency
+];
+
+$autoloader = null;
+foreach ($autoloadPaths as $path) {
+    if (file_exists($path)) {
+        $autoloader = require $path;
+        break;
+    }
+}
+
+if ($autoloader === null) {
+    fwrite(STDERR, "Could not find autoloader. Run 'composer install'.\n");
+    exit(1);
+}
+
+use SmartAutoloadConverter\Application\Command\AnalyzeCommand;
+use SmartAutoloadConverter\Application\Command\ConvertCommand;
+use SmartAutoloadConverter\Application\Command\InitCommand;
+use SmartAutoloadConverter\Application\Command\ReportCommand;
+use SmartAutoloadConverter\Application\Service\ConfigurationLoader;
+use SmartAutoloadConverter\Application\Service\ConversionOrchestrator;
+use SmartAutoloadConverter\Domain\Analysis\Service\ClassAnalyzer;
+use SmartAutoloadConverter\Domain\Analysis\Service\DependencyGraphBuilder;
+use SmartAutoloadConverter\Domain\Conversion\Service\ClassNameTransformer;
+use SmartAutoloadConverter\Domain\Conversion\Service\ClassReferenceReplacer;
+use SmartAutoloadConverter\Domain\Conversion\Service\IncludeRemover;
+use SmartAutoloadConverter\Domain\FileSystem\Service\BackupManager;
+use SmartAutoloadConverter\Domain\FileSystem\Service\DirectoryManager;
+use SmartAutoloadConverter\Domain\FileSystem\Service\FileScanner;
+use SmartAutoloadConverter\Domain\FileSystem\Service\FileWriter;
+use SmartAutoloadConverter\Domain\Pipeline\Service\Pipeline;
+use SmartAutoloadConverter\Domain\Pipeline\Step\AddNamespacesStep;
+use SmartAutoloadConverter\Domain\Pipeline\Step\AnalyzeStep;
+use SmartAutoloadConverter\Domain\Pipeline\Step\BackupStep;
+use SmartAutoloadConverter\Domain\Pipeline\Step\ComposerDumpStep;
+use SmartAutoloadConverter\Domain\Pipeline\Step\GenerateComposerStep;
+use SmartAutoloadConverter\Domain\Pipeline\Step\PrepareOutputStep;
+use SmartAutoloadConverter\Domain\Pipeline\Step\RemoveIncludesStep;
+use SmartAutoloadConverter\Domain\Pipeline\Step\RenameFilesStep;
+use SmartAutoloadConverter\Domain\Pipeline\Step\ReplaceReferencesStep;
+use SmartAutoloadConverter\Domain\Regex\ClassUsagePatterns;
+use SmartAutoloadConverter\Domain\Regex\IncludeRequirePatterns;
+use SmartAutoloadConverter\Domain\Report\Service\ReportGenerator;
+use SmartAutoloadConverter\Infrastructure\Composer\ComposerDumper;
+use SmartAutoloadConverter\Infrastructure\Composer\ComposerJsonEditor;
+use SmartAutoloadConverter\Infrastructure\Logger\ConversionLogger;
+use Symfony\Component\Console\Application;
+
+// --- Wire services (no framework-bundle needed) ---
+$logger = new ConversionLogger();
+$configLoader = new ConfigurationLoader();
+$fileScanner = new FileScanner();
+$fileWriter = new FileWriter();
+$directoryManager = new DirectoryManager();
+$usagePatterns = new ClassUsagePatterns();
+$includePatterns = new IncludeRequirePatterns();
+$classAnalyzer = new ClassAnalyzer($usagePatterns, $includePatterns);
+$graphBuilder = new DependencyGraphBuilder($classAnalyzer, $fileWriter);
+$transformer = new ClassNameTransformer();
+$replacer = new ClassReferenceReplacer();
+$includeRemover = new IncludeRemover($includePatterns);
+$backupManager = new BackupManager($directoryManager);
+$composerEditor = new ComposerJsonEditor();
+$composerDumper = new ComposerDumper();
+
+// --- Build pipeline ---
+$pipeline = new Pipeline($logger);
+$pipeline
+    ->addStep(new AnalyzeStep($fileScanner, $graphBuilder, $transformer))
+    ->addStep(new BackupStep($backupManager))
+    ->addStep(new PrepareOutputStep($directoryManager))
+    ->addStep(new RemoveIncludesStep($includeRemover, $fileWriter))
+    ->addStep(new ReplaceReferencesStep($replacer, $fileWriter))
+    ->addStep(new RenameFilesStep($directoryManager))
+    ->addStep(new AddNamespacesStep($replacer, $fileWriter))
+    ->addStep(new GenerateComposerStep($composerEditor))
+    ->addStep(new ComposerDumpStep($composerDumper));
+
+$orchestrator = new ConversionOrchestrator($configLoader, $pipeline, $logger);
+
+// --- Register commands ---
+$app = new Application('Smart Autoload Converter', '1.0.0');
+$app->add(new AnalyzeCommand($configLoader, $fileScanner, $graphBuilder, $transformer));
+$app->add(new ConvertCommand($orchestrator));
+$app->add(new InitCommand());
+$app->add(new ReportCommand());
+$app->run();

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Domain\Regex;
+namespace SmartAutoloadConverter\Tests\Domain\Regex;
 
-use App\Domain\Analysis\Model\IncludeType;
-use App\Domain\Regex\IncludeRequirePatterns;
+use SmartAutoloadConverter\Domain\Analysis\Model\IncludeType;
+use SmartAutoloadConverter\Domain\Regex\IncludeRequirePatterns;
 use PHPUnit\Framework\TestCase;
 
 class IncludeRequirePatternsTest extends TestCase

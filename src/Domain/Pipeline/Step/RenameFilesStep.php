@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Pipeline\Step;
+namespace SmartAutoloadConverter\Domain\Pipeline\Step;
 
-use App\Domain\FileSystem\Service\DirectoryManager;
-use App\Domain\Pipeline\Contract\PipelineStepInterface;
-use App\Domain\Pipeline\Model\PipelineContext;
-use App\Domain\Pipeline\Model\PipelineStepStatus;
-use App\Domain\Pipeline\Model\StepResult;
+use SmartAutoloadConverter\Domain\FileSystem\Service\DirectoryManager;
+use SmartAutoloadConverter\Domain\Pipeline\Contract\PipelineStepInterface;
+use SmartAutoloadConverter\Domain\Pipeline\Model\PipelineContext;
+use SmartAutoloadConverter\Domain\Pipeline\Model\PipelineStepStatus;
+use SmartAutoloadConverter\Domain\Pipeline\Model\StepResult;
 
 /**
  * Step 5: Move class files to their new PSR-4 directory structure.

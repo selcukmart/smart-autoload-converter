@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Domain\Conversion;
+namespace SmartAutoloadConverter\Tests\Domain\Conversion;
 
-use App\Domain\Conversion\Service\ClassNameTransformer;
+use SmartAutoloadConverter\Domain\Conversion\Service\ClassNameTransformer;
 use PHPUnit\Framework\TestCase;
 
 class ClassNameTransformerTest extends TestCase

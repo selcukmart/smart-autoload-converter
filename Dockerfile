@@ -6,9 +6,8 @@ RUN apk add --no-cache \
     zip \
     unzip \
     libzip-dev \
-    icu-dev \
-    && docker-php-ext-install zip intl \
-    && docker-php-ext-enable zip intl
+    && docker-php-ext-install zip \
+    && docker-php-ext-enable zip
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
@@ -33,7 +32,7 @@ COPY --from=deps /app/vendor /app/vendor
 COPY . .
 RUN composer dump-autoload --optimize --classmap-authoritative
 
-ENTRYPOINT ["php", "bin/console"]
+ENTRYPOINT ["php", "bin/smart-autoload-converter"]
 CMD ["list"]
 
 # --- Development / Test image ---
@@ -43,9 +42,10 @@ COPY --from=deps-dev /app/vendor /app/vendor
 COPY . .
 RUN composer dump-autoload --optimize
 
-# Prepare workspace with sample project so default commands work out of the box
+# Prepare workspace with sample project
 RUN mkdir -p /workspace/input /workspace/output /workspace/backups /workspace/reports \
     && cp -r fixtures/legacy-sample-project/* /workspace/input/
 
 # Smoke test
+RUN php bin/smart-autoload-converter list
 RUN php vendor/bin/phpunit --version

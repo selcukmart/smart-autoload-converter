@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Conversion\Model;
+namespace SmartAutoloadConverter\Domain\Conversion\Model;
 
 /**
  * Value Object: Maps a source directory to a PSR-4 namespace root.

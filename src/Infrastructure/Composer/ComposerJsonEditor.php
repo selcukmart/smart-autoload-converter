@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Infrastructure\Composer;
+namespace SmartAutoloadConverter\Infrastructure\Composer;
 
-use App\Domain\FileSystem\Exception\FileSystemException;
+use SmartAutoloadConverter\Domain\FileSystem\Exception\FileSystemException;
 
 /**
  * Reads and modifies composer.json autoload configuration.

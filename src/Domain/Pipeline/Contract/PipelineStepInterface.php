@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Domain\Pipeline\Contract;
+namespace SmartAutoloadConverter\Domain\Pipeline\Contract;
 
-use App\Domain\Pipeline\Model\PipelineContext;
-use App\Domain\Pipeline\Model\StepResult;
+use SmartAutoloadConverter\Domain\Pipeline\Model\PipelineContext;
+use SmartAutoloadConverter\Domain\Pipeline\Model\StepResult;
 
 interface PipelineStepInterface
 {

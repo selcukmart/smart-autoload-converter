@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Domain\Regex;
+namespace SmartAutoloadConverter\Tests\Domain\Regex;
 
-use App\Domain\Regex\ClassUsagePatterns;
+use SmartAutoloadConverter\Domain\Regex\ClassUsagePatterns;
 use PHPUnit\Framework\TestCase;
 
 class ClassUsagePatternsTest extends TestCase

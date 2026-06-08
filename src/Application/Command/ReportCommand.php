@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Application\Command;
+namespace SmartAutoloadConverter\Application\Command;
 
-use App\Domain\Report\Exporter\ConsoleExporter;
-use App\Domain\Report\Exporter\HtmlExporter;
-use App\Domain\Report\Exporter\JsonExporter;
-use App\Domain\Report\Exporter\ReportExporterInterface;
-use App\Domain\Report\Model\ConversionReport;
-use App\Domain\Pipeline\Model\PipelineStepStatus;
-use App\Domain\Pipeline\Model\StepResult;
+use SmartAutoloadConverter\Domain\Report\Exporter\ConsoleExporter;
+use SmartAutoloadConverter\Domain\Report\Exporter\HtmlExporter;
+use SmartAutoloadConverter\Domain\Report\Exporter\JsonExporter;
+use SmartAutoloadConverter\Domain\Report\Exporter\ReportExporterInterface;
+use SmartAutoloadConverter\Domain\Report\Model\ConversionReport;
+use SmartAutoloadConverter\Domain\Pipeline\Model\PipelineStepStatus;
+use SmartAutoloadConverter\Domain\Pipeline\Model\StepResult;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -20,7 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'smart:report',
+    name: 'report',
     description: 'Generate a report from a previous conversion JSON log',
 )]
 class ReportCommand extends Command
