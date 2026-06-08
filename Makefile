@@ -20,7 +20,7 @@ build:
 	$(APP) composer install --prefer-dist --no-interaction
 	@echo ""
 	@echo "=== Smart Autoload Converter ==="
-	@$(APP) php -v | head -1
+	@$(APP) sh -c "php -v | /usr/bin/head -1"
 	@$(APP) php bin/console --version 2>/dev/null || true
 	@echo ""
 
@@ -95,7 +95,7 @@ logs:
 status:
 	$(COMPOSE) ps
 	@echo ""
-	@$(COMPOSE) exec app php -v | head -1 2>/dev/null || echo "Containers not running"
+	@$(APP) sh -c "php -v | /usr/bin/head -1" 2>/dev/null || echo "Containers not running"
 
 ## Remove containers, volumes, and build cache
 clean:
