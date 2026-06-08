@@ -1,0 +1,7 @@
+/vendor/
+/var/
+/.env
+/.env.local
+/.idea/
+/node_modules/
+*.cache
