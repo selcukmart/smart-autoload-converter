@@ -9,3 +9,4 @@
 phpunit.xml
 composer.phar
 /workspace/
+smart_autoload.yaml
