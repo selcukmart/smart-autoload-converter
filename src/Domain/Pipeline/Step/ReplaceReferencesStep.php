@@ -45,7 +45,13 @@ class ReplaceReferencesStep implements PipelineStepInterface
         }
 
         foreach ($graph->getAllFileAnalyses() as $fileAnalysis) {
-            $content = $context->getFileContent($fileAnalysis->filePath)
+            // Work on the output copy
+            // In dry-run, output may not exist — fall back to source
+            $workPath = $context->toOutputPath($fileAnalysis->filePath);
+
+            $content = $context->getFileContent($workPath)
+                ?? $context->getFileContent($fileAnalysis->filePath)
+                ?? (is_file($workPath) ? $this->fileWriter->read($workPath) : null)
                 ?? $this->fileWriter->read($fileAnalysis->filePath);
 
             // Filter rules to only those relevant to classes used in this file
@@ -58,9 +64,9 @@ class ReplaceReferencesStep implements PipelineStepInterface
 
             if ($result->hasChanges()) {
                 if (!$context->dryRun) {
-                    $this->fileWriter->write($fileAnalysis->filePath, $result->modifiedContent);
+                    $this->fileWriter->write($workPath, $result->modifiedContent);
                 }
-                $context->setFileContent($fileAnalysis->filePath, $result->modifiedContent);
+                $context->setFileContent($workPath, $result->modifiedContent);
                 $filesChanged++;
                 $totalReplacements += $result->changeCount;
                 $changes[$fileAnalysis->relativePath] = $result->replacements;

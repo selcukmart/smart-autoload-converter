@@ -125,4 +125,19 @@ class PipelineContext
 
         return $value;
     }
+
+    // === Path helpers ===
+
+    /**
+     * Translate a source path to the equivalent output path.
+     * Example: /workspace/input/include/User.php → /workspace/output/include/User.php
+     */
+    public function toOutputPath(string $sourcePath): string
+    {
+        if (str_starts_with($sourcePath, $this->sourcePath)) {
+            $relative = substr($sourcePath, strlen(rtrim($this->sourcePath, '/')));
+            return rtrim($this->outputPath, '/') . $relative;
+        }
+        return $sourcePath;
+    }
 }

@@ -55,6 +55,7 @@ services:
         calls:
             - [addStep, ['@App\Domain\Pipeline\Step\AnalyzeStep']]
             - [addStep, ['@App\Domain\Pipeline\Step\BackupStep']]
+            - [addStep, ['@App\Domain\Pipeline\Step\PrepareOutputStep']]
             - [addStep, ['@App\Domain\Pipeline\Step\RemoveIncludesStep']]
             - [addStep, ['@App\Domain\Pipeline\Step\ReplaceReferencesStep']]
             - [addStep, ['@App\Domain\Pipeline\Step\RenameFilesStep']]

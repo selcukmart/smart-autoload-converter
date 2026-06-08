@@ -36,23 +36,29 @@ class RemoveIncludesStep implements PipelineStepInterface
         $changes = [];
 
         foreach ($graph->getFilesWithIncludes() as $fileAnalysis) {
-            $content = $context->getFileContent($fileAnalysis->filePath)
+            // Work on the output copy (source stays untouched)
+            // In dry-run, output may not exist — fall back to source
+            $workPath = $context->toOutputPath($fileAnalysis->filePath);
+
+            $content = $context->getFileContent($workPath)
+                ?? $context->getFileContent($fileAnalysis->filePath)
+                ?? (is_file($workPath) ? $this->fileWriter->read($workPath) : null)
                 ?? $this->fileWriter->read($fileAnalysis->filePath);
 
             $result = $this->includeRemover->process($content, $fileAnalysis, $graph, $preserveList);
 
             if ($result->hasChanges()) {
                 if (!$context->dryRun) {
-                    $this->fileWriter->write($fileAnalysis->filePath, $result->modifiedContent);
+                    $this->fileWriter->write($workPath, $result->modifiedContent);
                 }
-                $context->setFileContent($fileAnalysis->filePath, $result->modifiedContent);
+                $context->setFileContent($workPath, $result->modifiedContent);
                 $filesChanged++;
                 $totalRemoved += $result->changeCount;
                 $changes[$fileAnalysis->relativePath] = $result->replacements;
             }
 
             if ($result->requiresManualReview) {
-                $context->addManualReview($fileAnalysis->filePath, $result->reviewReason ?? 'Dynamic include');
+                $context->addManualReview($workPath, $result->reviewReason ?? 'Dynamic include');
             }
         }
 

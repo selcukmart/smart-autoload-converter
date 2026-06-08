@@ -36,22 +36,26 @@ class RenameFilesStep implements PipelineStepInterface
                 continue;
             }
 
-            if ($rule->oldFilePath === $rule->newFilePath) {
+            // Source path in output directory (after PrepareOutputStep copied it)
+            $sourceInOutput = $context->toOutputPath($rule->oldFilePath);
+
+            if ($sourceInOutput === $rule->newFilePath) {
                 continue;
             }
 
             if ($context->dryRun) {
-                $moves[$rule->oldFilePath] = $rule->newFilePath;
+                $moves[$sourceInOutput] = $rule->newFilePath;
                 $filesChanged++;
                 continue;
             }
 
-            $this->directoryManager->moveFile($rule->oldFilePath, $rule->newFilePath);
-            $moves[$rule->oldFilePath] = $rule->newFilePath;
+            $this->directoryManager->moveFile($sourceInOutput, $rule->newFilePath);
+            $moves[$sourceInOutput] = $rule->newFilePath;
             $filesChanged++;
 
             // Update context: content is now at the new path
-            $cachedContent = $context->getFileContent($rule->oldFilePath);
+            $cachedContent = $context->getFileContent($sourceInOutput)
+                ?? $context->getFileContent($rule->oldFilePath);
             if ($cachedContent !== null) {
                 $context->setFileContent($rule->newFilePath, $cachedContent);
             }

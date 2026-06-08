@@ -20,7 +20,8 @@ class ComposerJsonEditor
     public function addPsr4Entries(string $composerJsonPath, array $psr4Mappings): array
     {
         if (!file_exists($composerJsonPath)) {
-            throw new FileSystemException("composer.json not found: {$composerJsonPath}");
+            // Create a fresh composer.json with PSR-4 entries
+            return $this->createFresh($composerJsonPath, $psr4Mappings);
         }
 
         $original = file_get_contents($composerJsonPath);
@@ -66,6 +67,38 @@ class ComposerJsonEditor
      */
     public function write(string $composerJsonPath, string $content): void
     {
+        $dir = dirname($composerJsonPath);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
         file_put_contents($composerJsonPath, $content);
+    }
+
+    /**
+     * @return array{original: string, modified: string, diff: array}
+     */
+    private function createFresh(string $path, array $psr4Mappings): array
+    {
+        $psr4 = [];
+        foreach ($psr4Mappings as $namespace => $directory) {
+            $psr4[rtrim($namespace, '\\') . '\\'] = $directory;
+        }
+
+        $data = [
+            'autoload' => ['psr-4' => $psr4],
+            'require' => ['php' => '>=8.0'],
+        ];
+
+        $modified = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n";
+
+        return [
+            'original' => '',
+            'modified' => $modified,
+            'diff' => [
+                'created' => true,
+                'added' => $psr4,
+                'total_entries' => count($psr4),
+            ],
+        ];
     }
 }
