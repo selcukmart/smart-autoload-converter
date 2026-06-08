@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Analysis\Model;
 
-class IncludeStatement
+readonly class IncludeStatement
 {
     public function __construct(
         public string $filePath,

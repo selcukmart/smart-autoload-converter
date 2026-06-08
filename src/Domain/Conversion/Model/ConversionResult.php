@@ -7,7 +7,7 @@ namespace App\Domain\Conversion\Model;
 /**
  * Value Object: Result of a conversion operation on a single file.
  */
-class ConversionResult
+readonly class ConversionResult
 {
     /**
      * @param array<string, string> $replacements old => new mappings applied

@@ -19,7 +19,11 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-            - '../src/Helper/Helpers.php'
+            - '../src/Converter/'
+            - '../src/Controller/'
+            - '../src/Helper/'
+            - '../src/CustomLogger/'
+            - '../src/GlobalTraits/'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
@@ -57,10 +61,3 @@ services:
             - [addStep, ['@App\Domain\Pipeline\Step\AddNamespacesStep']]
             - [addStep, ['@App\Domain\Pipeline\Step\GenerateComposerStep']]
             - [addStep, ['@App\Domain\Pipeline\Step\ComposerDumpStep']]
-
-    # === Exclude legacy code from autowiring ===
-
-    App\Converter\:
-        resource: '../src/Converter/'
-        autoconfigure: false
-        autowire: false

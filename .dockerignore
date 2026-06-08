@@ -1,0 +1,10 @@
+.git
+.github
+.idea
+.DS_Store
+vendor
+var
+node_modules
+workspace
+*.cache
+.env.local

@@ -8,7 +8,7 @@ namespace App\Domain\Analysis\Model;
  * Value Object: Complete analysis result for a single PHP file.
  * Contains all class definitions and include statements found.
  */
-class FileAnalysis
+readonly class FileAnalysis
 {
     /**
      * @param ClassDefinition[] $classDefinitions

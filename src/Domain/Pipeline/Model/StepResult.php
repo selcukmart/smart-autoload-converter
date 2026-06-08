@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Pipeline\Model;
 
-class StepResult
+readonly class StepResult
 {
     /**
      * @param array<string, mixed> $changes

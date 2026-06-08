@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Conversion\Model;
 
-class ConversionRule
+readonly class ConversionRule
 {
     public function __construct(
         public string $oldClassName,

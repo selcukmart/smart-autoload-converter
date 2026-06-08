@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Analysis\Model;
 
-class ClassDefinition
+readonly class ClassDefinition
 {
     public function __construct(
         public string $originalName,

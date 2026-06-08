@@ -8,7 +8,7 @@ namespace App\Domain\Conversion\Model;
  * Value Object: Maps a source directory to a PSR-4 namespace root.
  * Example: directory "include/MyLib" => namespace "MyLib"
  */
-class NamespaceMapping
+readonly class NamespaceMapping
 {
     public function __construct(
         public string $directory,

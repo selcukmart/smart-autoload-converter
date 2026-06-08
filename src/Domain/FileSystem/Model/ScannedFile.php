@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\FileSystem\Model;
 
-class ScannedFile
+readonly class ScannedFile
 {
     public function __construct(
         public string $path,

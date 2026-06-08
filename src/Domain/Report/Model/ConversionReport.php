@@ -9,7 +9,7 @@ use App\Domain\Pipeline\Model\StepResult;
 /**
  * Full conversion report with statistics and step details.
  */
-class ConversionReport
+readonly class ConversionReport
 {
     /**
      * @param StepResult[] $stepResults

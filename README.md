@@ -1,8 +1,10 @@
 # Smart Autoload Converter
 
-[![PHP 8.1+](https://img.shields.io/badge/PHP-8.1%2B-blue.svg)](https://www.php.net/)
-[![Symfony 6.4](https://img.shields.io/badge/Symfony-6.4-black.svg)](https://symfony.com/)
+[![PHP 8.4+](https://img.shields.io/badge/PHP-8.4%2B-blue.svg)](https://www.php.net/)
+[![Symfony 7/8](https://img.shields.io/badge/Symfony-7%20|%208-black.svg)](https://symfony.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Tests](https://img.shields.io/badge/Tests-82%20passed-brightgreen.svg)](tests/)
+[![Docker](https://img.shields.io/badge/Docker-ready-2496ED.svg)](Dockerfile)
 
 Convert legacy PHP projects from `include/require` to **PSR-4 autoloading** — automatically.
 
@@ -132,6 +134,26 @@ vendor/bin/phpunit
 # Run specific test suite
 vendor/bin/phpunit tests/Domain/
 vendor/bin/phpunit tests/Integration/
+```
+
+## Docker
+
+```bash
+# Build dev image
+docker compose build app
+
+# Run tests in Docker
+docker compose run --rm test
+
+# Analyze a project
+docker compose exec app php bin/console smart:analyze -t /workspace/input
+
+# Convert a project (mount your legacy code to workspace/input)
+docker compose --profile convert run --rm convert
+
+# One-liner: build + test
+docker build --target dev -t smart-autoload-converter:test . \
+  && docker run --rm smart-autoload-converter:test vendor/bin/phpunit --no-coverage
 ```
 
 ## Origin Story
