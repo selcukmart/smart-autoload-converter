@@ -41,6 +41,7 @@ class ConversionOrchestrator
             'export-path' => $exportPath,
             'dry-run' => $dryRun,
         ]);
+        $this->configLoader->validate($config);
 
         if ($steps !== null) {
             $config['pipeline']['steps'] = $steps;

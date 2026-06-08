@@ -52,6 +52,7 @@ class AnalyzeCommand extends Command
 
         $config = $this->configLoader->load($configPath);
         $config = $this->configLoader->applyOverrides($config, ['target-path' => $targetPath]);
+        $this->configLoader->validate($config);
 
         $sourcePath = $config['source']['path'];
         $io->info("Scanning: {$sourcePath}");

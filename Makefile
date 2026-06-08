@@ -53,11 +53,11 @@ analyze:
 
 ## Dry-run conversion (preview only)
 dry-run:
-	$(PHP) bin/console smart:convert -t /workspace/input -e /workspace/output --dry-run
+	$(PHP) bin/console smart:convert -t /workspace/input --export-path=/workspace/output --dry-run
 
 ## Run full conversion
 convert:
-	$(PHP) bin/console smart:convert -t /workspace/input -e /workspace/output
+	$(PHP) bin/console smart:convert -t /workspace/input --export-path=/workspace/output
 
 ## Generate example config
 init:

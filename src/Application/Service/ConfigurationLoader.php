@@ -52,8 +52,6 @@ class ConfigurationLoader
             $config = $this->mergeRecursive($config, $userConfig);
         }
 
-        $this->validate($config);
-
         return $config;
     }
 
@@ -86,7 +84,7 @@ class ConfigurationLoader
      * @param array<string, mixed> $config
      * @throws \InvalidArgumentException
      */
-    private function validate(array $config): void
+    public function validate(array $config): void
     {
         $sourcePath = $config['source']['path'] ?? null;
         if ($sourcePath === null || !is_dir($sourcePath)) {
