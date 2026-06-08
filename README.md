@@ -1,7 +1,7 @@
 # Smart Autoload Converter
 
-[![PHP 8.4+](https://img.shields.io/badge/PHP-8.4%2B-blue.svg)](https://www.php.net/)
-[![Symfony 7/8](https://img.shields.io/badge/Symfony-7%20|%208-black.svg)](https://symfony.com/)
+[![PHP 8.5](https://img.shields.io/badge/PHP-8.5-blue.svg)](https://www.php.net/)
+[![Symfony 7.4 LTS](https://img.shields.io/badge/Symfony-7.4%20LTS-black.svg)](https://symfony.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/Tests-82%20passed-brightgreen.svg)](tests/)
 [![Docker](https://img.shields.io/badge/Docker-ready-2496ED.svg)](Dockerfile)

@@ -1,6 +1,5 @@
-# Smart Autoload Converter - PHP 8.4 CLI
-# Switch to php:8.5-cli-alpine when PHP 8.5 GA image is available
-FROM php:8.4-cli-alpine AS base
+# Smart Autoload Converter - PHP 8.5 + Symfony 7.4 LTS
+FROM php:8.5-cli-alpine AS base
 
 RUN apk add --no-cache \
     git \
@@ -44,8 +43,5 @@ COPY --from=deps-dev /app/vendor /app/vendor
 COPY . .
 RUN composer dump-autoload --optimize
 
-# Smoke test: verify autoload + PHPUnit
+# Smoke test
 RUN php vendor/bin/phpunit --version
-
-ENTRYPOINT ["php"]
-CMD ["bin/console", "list"]

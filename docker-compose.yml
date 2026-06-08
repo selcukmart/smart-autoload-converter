@@ -1,9 +1,5 @@
 # Smart Autoload Converter - Development Environment
-# Usage:
-#   docker compose up -d
-#   docker compose exec app php bin/console smart:analyze -t /workspace/input
-#   docker compose exec app php vendor/bin/phpunit --no-coverage
-#   docker compose run --rm test
+# Usage: see Makefile (make build, make test, make analyze, etc.)
 
 services:
   app:
@@ -13,41 +9,15 @@ services:
     container_name: smart-autoload-converter
     volumes:
       - .:/app
+      - vendor:/app/vendor
       - ./workspace:/workspace
       - composer-cache:/root/.composer/cache
     working_dir: /app
-    entrypoint: ["php"]
-    command: ["bin/console", "list"]
+    command: ["sleep", "infinity"]
     tty: true
     stdin_open: true
-
-  # One-shot test runner
-  test:
-    build:
-      context: .
-      target: dev
-    volumes:
-      - .:/app
-    working_dir: /app
-    entrypoint: ["php"]
-    command: ["vendor/bin/phpunit", "--no-coverage", "--colors=always"]
-    profiles:
-      - test
-
-  # Run conversion on a mounted legacy project
-  convert:
-    build:
-      context: .
-      target: prod
-    volumes:
-      - ./workspace/input:/workspace/input:ro
-      - ./workspace/output:/workspace/output
-      - ./workspace/backups:/workspace/backups
-      - ./workspace/reports:/workspace/reports
-    working_dir: /app
-    command: ["smart:convert", "-t", "/workspace/input", "-e", "/workspace/output"]
-    profiles:
-      - convert
+    restart: unless-stopped
 
 volumes:
+  vendor:
   composer-cache:

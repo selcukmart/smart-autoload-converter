@@ -8,13 +8,13 @@ on:
 
 jobs:
   tests:
-    name: PHP ${{ matrix.php }}
+    name: PHP ${{ matrix.php }} Tests
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
-        php: ['8.4']
+        php: ['8.5']
 
     steps:
       - uses: actions/checkout@v4
@@ -43,4 +43,7 @@ jobs:
         run: docker build --target dev -t smart-autoload-converter:test .
 
       - name: Run tests in Docker
-        run: docker run --rm smart-autoload-converter:test vendor/bin/phpunit --no-coverage --colors=never
+        run: docker run --rm smart-autoload-converter:test php vendor/bin/phpunit --no-coverage --colors=never
+
+      - name: Verify CLI commands
+        run: docker run --rm smart-autoload-converter:test php bin/console list smart
