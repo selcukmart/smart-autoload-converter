@@ -131,6 +131,7 @@ src/
       ConversionOrchestrator.php          Main entry point, wires everything
       ConfigurationLoader.php             Loads and validates YAML config
       ProjectValidator.php                Validates source project before conversion
+      ProjectAnalyzer.php                 Auto-detects patterns for smart:init command
     Command/
       ConvertCommand.php                  Main CLI command (smart:convert)
       AnalyzeCommand.php                  Analysis only (smart:analyze)
@@ -148,52 +149,43 @@ src/
     Logger/
       ConversionLogger.php                Structured logging for the process
 
+bin/
+  smart-autoload-converter                Symfony Console Application entry point
+
 config/
   services.yaml                           Symfony DI configuration
   smart_autoload_converter.yaml           Default conversion config
 
 tests/
-  Domain/
-    Analysis/
-      ClassAnalyzerTest.php
-      IncludeRequireAnalyzerTest.php
-      DependencyGraphBuilderTest.php
-    Conversion/
-      NamespaceGeneratorTest.php
-      ClassNameTransformerTest.php
-      ReservedWordFixerTest.php
-      IncludeRemoverTest.php
-      ClassReferenceReplacerTest.php
-      SameNameResolverTest.php
-    Pipeline/
-      PipelineTest.php
-      Each StepTest.php
-    Regex/
-      ClassUsagePatternsTest.php
-      IncludeRequirePatternsTest.php
-    Report/
-      ReportGeneratorTest.php
-  Application/
-    Service/
-      ConversionOrchestratorTest.php
-      ConfigurationLoaderTest.php
-    Command/
-      ConvertCommandTest.php
-      AnalyzeCommandTest.php
-  Integration/
-    FullConversionTest.php                Converts fixture project end-to-end
+  (See 06_TESTING_STRATEGY.md for complete test structure)
 
 fixtures/
   legacy-sample-project/
     include/
       MyLib/
-        MyLib_user_construct.php
-        MyLib_user_list.php
-        MyLib_market_construct.php
+        User/
+          MyLib_user_construct.php        class MyLib_user_construct
+          MyLib_user_list.php             class MyLib_user_list
+        Market/
+          MyLib_market_construct.php      class MyLib_market_construct
+          MyLib_market_view.php           class MyLib_market_view
+        UI/
+          MyLib_UI_Abstract.php           class MyLib_UI_Abstract (reserved word)
+          viewController.php             class viewController (same name in 2 dirs)
       Vendor/
-        Vendor_db_adapter.php
+        Vendor_db_adapter.php             class Vendor_db_adapter
+        Vendor_db_Abstract.php            class Vendor_db_Abstract (reserved word)
+    pages/
+      dashboard.php                       has 5 include_once, uses new MyLib_user_construct
+      admin/
+        users.php                         has require_once, extends MyLib_user_list
+        viewController.php               class viewController (SAME NAME as UI one)
     scripts/
-      process.php                         (has include statements)
+      process.php                         has include, instanceof check, static call
+      helpers.php                         non-class file (functions), should NOT be removed
+    config.php                            non-class include, should be preserved
+    index.php                             entry point with multiple requires
+    composer.json                         existing composer.json to update
     index.php                             (entry point with requires)
 ```
 
@@ -212,6 +204,7 @@ fixtures/
 | `ChangeFileContentsAfterCreating` | `ClassReferenceReplacer` (integrated) | Domain/Conversion |
 | `ZipWholeFolder` | `BackupManager` | Domain/FileSystem |
 | `ClassStringsForPRF` | `ClassNameTransformer` | Domain/Conversion |
+| `ClassStrings` | Merged into `ClassNameTransformer` (string utilities) | Domain/Conversion |
 | `ClassInformationObject` | `ClassDefinition` | Domain/Analysis/Model |
 | `FileObject` | `ScannedFile` | Domain/FileSystem/Model |
 | `FileContentAnalysis` | `FileAnalysis` + `ClassAnalyzer` | Domain/Analysis |
@@ -219,7 +212,7 @@ fixtures/
 | `InvestigateMoreSameClassname` | `SameNameResolver` | Domain/Conversion |
 | `CopyFolderToSelectedFolder` | `BackupManager` | Domain/FileSystem |
 | `MigrationController` | `ConvertCommand` + `ConfigurationLoader` | Application |
-| `Helpers.php` (functions) | `ReservedWordFixer` + `ClassStringUtils` | Domain/Conversion |
+| `Helpers.php` (global functions) | `ReservedWordFixer` (namespaceFix) + merged into `ClassNameTransformer` (string ops) | Domain/Conversion |
 | `CustomLogger` | `ConversionLogger` (PSR-3) | Infrastructure |
 
 ---

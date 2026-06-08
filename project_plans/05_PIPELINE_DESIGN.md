@@ -109,16 +109,24 @@ interface PipelineStepInterface
 5. Track all replacements for the report
 
 **The 10 regex patterns (from ClassUsagePatterns):**
-- `new ClassName` -> `new \Namespace\ClassName`
-- `ClassName::` -> `\Namespace\ClassName::`
-- `extends ClassName` -> `extends \Namespace\ClassName`
-- `implements ClassName` -> `implements \Namespace\ClassName`
-- `instanceof ClassName` -> `instanceof \Namespace\ClassName`
-- `catch (ClassName` -> `catch (\Namespace\ClassName`
-- Function param: `(ClassName $var)` -> `(\Namespace\ClassName $var)`
-- Return type: `): ClassName` -> `): \Namespace\ClassName`
-- Property type: `ClassName $prop` -> `\Namespace\ClassName $prop`
-- Use statement: add `use \Namespace\ClassName;` at top of file
+
+The replacement strategy uses `use` statements + short class names (modern PHP convention):
+
+1. Add `use OldNamespace\NewClass;` at top of file
+2. Replace all references with short class name
+
+Example transformation:
+- File header gets: `use MyLib\User\User;`
+- `new MyLib_user_construct()` becomes `new User()`
+- `MyLib_user_construct::create()` becomes `User::create()`
+- `extends MyLib_user_construct` becomes `extends User`
+- `implements MyLib_UI_Interface` becomes `implements Interface` (with `use MyLib\UI\Interface;`)
+- `instanceof MyLib_user_construct` becomes `instanceof User`
+- `catch (MyLib_Exception $e)` becomes `catch (Exception $e)` (with `use MyLib\Exception;`)
+- Function param: `(MyLib_user_construct $user)` becomes `(User $user)`
+- Return type: `): MyLib_user_construct` becomes `): User`
+
+When two classes have the same short name (collision), the fully-qualified name with backslash prefix is used instead: `new \MyLib\User\User()`.
 
 **Dry-run behavior:** Lists all replacements per file without applying.
 
@@ -194,3 +202,25 @@ ClassConvertedEvent(string $oldName, string $newName)
 ```
 
 Users can hook into these events for custom behavior (logging, notifications, custom post-processing).
+
+---
+
+## Optional: Git Commit Per Step
+
+When `pipeline.git_commit_per_step: true` in configuration, the `Infrastructure/Git/GitCommitter` service listens to `StepCompletedEvent` and automatically creates a git commit after each successful step.
+
+Commit message format: `smart-autoload-converter: {step_name} completed ({files_changed} files changed)`
+
+Example git log after full conversion:
+```
+abc1234 smart-autoload-converter: composer_dump completed (1 files changed)
+def5678 smart-autoload-converter: generate_composer completed (1 files changed)
+ghi9012 smart-autoload-converter: add_namespaces completed (47 files changed)
+jkl3456 smart-autoload-converter: rename_files completed (47 files changed)
+mno7890 smart-autoload-converter: replace_references completed (128 files changed)
+pqr1234 smart-autoload-converter: remove_includes completed (89 files changed)
+stu5678 smart-autoload-converter: backup completed (1 files changed)
+vwx9012 smart-autoload-converter: analyze completed (0 files changed)
+```
+
+This enables `git revert` of individual steps if a problem is found after conversion. The backup step becomes less critical when git tracks each change independently.

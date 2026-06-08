@@ -62,7 +62,7 @@ This becomes a YAML configuration section that users define for their own projec
 |-------------|----------|
 | `src/AutoConverterForPRF/` | `src/Domain/` (DDD restructure) |
 | `src/Helper/ClassStringsForPRF.php` | `src/Domain/Conversion/ClassNameTransformer.php` |
-| `src/Helper/ClassStrings.php` | `src/Domain/Conversion/ClassStringUtils.php` |
+| `src/Helper/ClassStrings.php` | Merged into `ClassNameTransformer.php` (utility methods absorbed) |
 | `src/Controller/MigrationController.php` | `src/Application/Controller/ConversionController.php` |
 | `src/Controller/PanelController.php` | Remove (web UI rebuilt in Phase 6) |
 

@@ -4,6 +4,40 @@
 
 Replace the HTTP-triggered controller with Symfony Console commands and a YAML-based configuration system. The tool should be fully operable from the command line.
 
+## Tool Nature
+
+Smart Autoload Converter is a **temporary tool**: clone, configure, convert, delete. It is a full Symfony application (not a Composer package). Users do not add it to their project's dependencies.
+
+## Installation
+
+```bash
+git clone https://github.com/selcukmart/smart-autoload-converter.git
+cd smart-autoload-converter
+composer install
+```
+
+## Default Directories
+
+| Directory | Default | Purpose |
+|-----------|---------|---------|
+| target-path | `./workspace/input/` | Where the legacy project is placed or pointed to |
+| export-path | `./workspace/output/` | Where converted output is written |
+| backup-path | `./workspace/backups/` | Where backup archives are stored |
+| report-path | `./workspace/reports/` | Where analysis reports are saved |
+
+Users can override these via CLI flags or YAML config. If no config is provided, the tool works with these defaults.
+
+```bash
+# Using defaults (place your project in workspace/input/)
+php bin/console smart:convert
+
+# Override paths via CLI
+php bin/console smart:convert --target-path=/path/to/legacy --export-path=/path/to/output
+
+# Or specify everything in config
+php bin/console smart:convert --config=my-project.yaml
+```
+
 ---
 
 ## Symfony Commands
@@ -18,7 +52,7 @@ php bin/console smart:convert --config=smart-autoload-converter.yaml
 php bin/console smart:convert --config=config.yaml --dry-run
 
 # Specific steps only
-php bin/console smart:convert --config=config.yaml --steps=analyze,backup,namespace
+php bin/console smart:convert --config=config.yaml --steps=analyze,backup,add_namespaces
 
 # Verbose output
 php bin/console smart:convert --config=config.yaml -vvv

@@ -4,6 +4,10 @@
 
 Upgrade from PHP 8.1 / Symfony 6.1 to PHP 8.5 / Symfony 7.4 LTS, applying modern PHP features throughout.
 
+## Tool Nature
+
+Smart Autoload Converter is a **Symfony application** (not a Composer package). Users clone the repo, configure, and run. It is a temporary tool: install, convert your project, then delete. It provides both CLI commands (primary interface) and an optional web dashboard for visual analysis reports.
+
 ---
 
 ## PHP 8.5 Features to Apply
@@ -136,7 +140,7 @@ Consider Fibers for non-blocking file I/O when processing thousands of files.
 
 ### Remove Unnecessary Dependencies
 
-Remove Doctrine ORM, Twig, AssetMapper, and all web-related packages. This is a CLI tool, not a web application.
+Remove Doctrine ORM, database-related packages, and heavy dependencies not needed for file transformation. Keep Twig (for HTML reports) and Symfony web components (for optional dashboard).
 
 ### Symfony Attributes (replace annotations)
 
@@ -179,7 +183,7 @@ parameters:
 return (new PhpCsFixer\Config())
     ->setRules([
         '@Symfony' => true,
-        '@PHP84Migration' => true,
+        '@PHP85Migration' => true,
         'strict_types' => true,
         'declare_strict_types' => true,
     ]);

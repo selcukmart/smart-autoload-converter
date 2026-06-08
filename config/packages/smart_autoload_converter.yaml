@@ -1,0 +1,27 @@
+# Smart Autoload Converter - Default Parameters
+# These are injected into services via services.yaml
+
+parameters:
+    smart_autoload.separator: '_'
+
+    smart_autoload.suffix_transforms:
+        construct: ''
+        Construct: ''
+        index: ''
+        Object: ''
+
+    smart_autoload.reserved_word_fixes:
+        Abstract: 'Abstracts'
+        Interface: 'Interfaces'
+        Trait: 'Traits'
+        Class: 'Classes'
+        List: 'Lists'
+        String: 'StringOperations'
+        Object: 'Objects'
+        Php: 'PhpCodes'
+        Function: 'Functions'
+        Namespace: 'Namespaces'
+        Match: 'Matches'
+        Enum: 'Enums'
+        Readonly: 'ReadonlyItems'
+        STATIC: 'StaticItems'

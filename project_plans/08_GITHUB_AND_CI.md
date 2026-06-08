@@ -73,7 +73,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ['8.4', '8.5']
+        php: ['8.5']
     steps:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
@@ -143,7 +143,7 @@ jobs:
         }
     ],
     "require": {
-        "php": ">=8.4",
+        "php": ">=8.5",
         "symfony/console": "^7.4",
         "symfony/yaml": "^7.4",
         "symfony/finder": "^7.4",
@@ -172,13 +172,13 @@ jobs:
 
 ### Versioning Strategy
 
-| Version | Meaning |
-|---------|---------|
-| v0.1.0 | First public release (MVP: analyze + convert) |
-| v0.2.0 | Dry-run mode + report output |
-| v0.3.0 | smart:init auto-detection |
-| v0.4.0 | Git commit per step |
-| v1.0.0 | Stable, fully tested, documented |
+| Version | Scope |
+|---------|-------|
+| v0.1.0 | MVP: analyze + convert + dry-run + report (core pipeline works end-to-end) |
+| v0.2.0 | smart:init auto-detection + improved error messages |
+| v0.3.0 | Web dashboard for visual reports |
+| v0.4.0 | Git commit per step + event system |
+| v1.0.0 | Stable, security audited, fully documented |
 
 ---
 
@@ -188,7 +188,7 @@ jobs:
 [![CI](https://github.com/selcukmart/smart-autoload-converter/actions/workflows/ci.yml/badge.svg)](...)
 [![Coverage](https://codecov.io/gh/selcukmart/smart-autoload-converter/branch/main/graph/badge.svg)](...)
 [![PHPStan](https://img.shields.io/badge/PHPStan-level%209-brightgreen.svg)](...)
-[![PHP Version](https://img.shields.io/badge/php-%3E%3D8.4-blue.svg)](...)
+[![PHP Version](https://img.shields.io/badge/php-%3E%3D8.5-blue.svg)](...)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](...)
 [![Packagist](https://img.shields.io/packagist/v/selcukmart/smart-autoload-converter.svg)](...)
 ```

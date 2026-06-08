@@ -61,6 +61,7 @@ class User {
         return $list->getAll();
     }
 }
+// FQCN: MyLib\User\User (namespace MyLib\User + class User)
 ```
 
 ### Differentiation Section

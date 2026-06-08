@@ -25,28 +25,42 @@ tests/
       SameNameResolverTest.php
     FileSystem/
       FileScannerTest.php
+      FileReaderTest.php
+      FileWriterTest.php
+      DirectoryManagerTest.php
       BackupManagerTest.php
     Pipeline/
       PipelineTest.php
       Step/
         AnalyzeStepTest.php
+        BackupStepTest.php
         RemoveIncludesStepTest.php
         ReplaceReferencesStepTest.php
         RenameFilesStepTest.php
         AddNamespacesStepTest.php
+        GenerateComposerStepTest.php
+        ComposerDumpStepTest.php
     Regex/
       ClassUsagePatternsTest.php
       IncludeRequirePatternsTest.php
+      ClassDefinitionPatternsTest.php
     Report/
       ReportGeneratorTest.php
   Application/
     Service/
       ConversionOrchestratorTest.php
       ConfigurationLoaderTest.php
+      ProjectAnalyzerTest.php
     Command/
       ConvertCommandTest.php
       AnalyzeCommandTest.php
       InitCommandTest.php
+      ReportCommandTest.php
+  Infrastructure/
+    Composer/
+      ComposerJsonEditorTest.php
+    Logger/
+      ConversionLoggerTest.php
   Integration/
     FullConversionTest.php
 ```
@@ -113,21 +127,29 @@ class ClassNameTransformerTest extends TestCase
         $transformer = new ClassNameTransformer($config);
         $result = $transformer->transform('MyLib_user_construct');
         
-        $this->assertEquals('MyLib\\User', $result->fullyQualifiedName);
+        // MyLib_user_construct -> namespace MyLib\User, class User
+        // FQCN = MyLib\User\User (namespace + class)
+        $this->assertEquals('MyLib\\User\\User', $result->fullyQualifiedName);
         $this->assertEquals('User', $result->className);
-        $this->assertEquals('MyLib', $result->namespace);
+        $this->assertEquals('MyLib\\User', $result->namespace);
     }
 
     public function testReservedWordFix(): void
     {
         $result = $transformer->transform('MyLib_UI_Abstract');
+        // Abstract -> Abstracts (reserved word fix)
         $this->assertEquals('MyLib\\UI\\Abstracts', $result->fullyQualifiedName);
+        $this->assertEquals('Abstracts', $result->className);
+        $this->assertEquals('MyLib\\UI', $result->namespace);
     }
 
     public function testCustomSuffixMapping(): void
     {
         $result = $transformer->transform('MyLib_user_list');
+        // list -> List (suffix transform), namespace = MyLib\User
         $this->assertEquals('MyLib\\User\\UserList', $result->fullyQualifiedName);
+        $this->assertEquals('UserList', $result->className);
+        $this->assertEquals('MyLib\\User', $result->namespace);
     }
 }
 ```
@@ -225,18 +247,20 @@ class FullConversionTest extends KernelTestCase
         // Verify: namespaces added
         $content = file_get_contents($this->workDir . '/include/MyLib/User/User.php');
         $this->assertStringContains('namespace MyLib\\User;', $content);
+        $this->assertStringContains('class User', $content);
         
         // Verify: includes removed
         $dashboard = file_get_contents($this->workDir . '/pages/dashboard.php');
         $this->assertStringNotContains('require_once', $dashboard);
+        $this->assertStringContains('use MyLib\\User\\User;', $dashboard);
         
         // Verify: composer.json updated
         $composer = json_decode(file_get_contents($this->workDir . '/composer.json'), true);
         $this->assertArrayHasKey('MyLib\\', $composer['autoload']['psr-4']);
         
-        // Verify: autoloading works
+        // Verify: autoloading works (FQCN = namespace + class)
         require $this->workDir . '/vendor/autoload.php';
-        $this->assertTrue(class_exists('MyLib\\User'));
+        $this->assertTrue(class_exists('MyLib\\User\\User'));
     }
 
     protected function tearDown(): void

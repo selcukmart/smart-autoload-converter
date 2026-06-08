@@ -1,0 +1,13 @@
+{
+    "name": "legacy/sample-project",
+    "description": "Sample legacy PHP project for testing smart-autoload-converter",
+    "type": "project",
+    "autoload": {
+        "classmap": [
+            "include/"
+        ]
+    },
+    "require": {
+        "php": ">=7.4"
+    }
+}

@@ -122,7 +122,7 @@ If you find a PHP class usage pattern that the converter misses:
 
 ## Code Standards
 
-- PHP 8.4+ strict types everywhere
+- PHP 8.5+ strict types everywhere
 - No traits (use service classes with DI)
 - No static methods (all services injectable)
 - PHPStan level 9 must pass
@@ -140,7 +140,7 @@ If you find a PHP class usage pattern that the converter misses:
 
 ## Development Setup
 
-Prerequisites: PHP 8.4+, Composer
+Prerequisites: PHP 8.5+, Composer
 
 git clone https://github.com/selcukmart/smart-autoload-converter.git
 cd smart-autoload-converter
@@ -245,7 +245,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 - Initial project structure with DDD architecture
-- 8-step conversion pipeline
+- 8-step conversion pipeline (analyze, backup, remove_includes, replace_references, rename_files, add_namespaces, generate_composer, composer_dump)
 - YAML-based configuration system
 - CLI commands: smart:convert, smart:analyze, smart:init, smart:report
 - Dry-run mode for safe preview
@@ -393,6 +393,6 @@ Before tagging v0.1.0:
 - [ ] .github/PULL_REQUEST_TEMPLATE.md present
 - [ ] Packagist account ready
 - [ ] composer.json has correct name, description, keywords, license
-- [ ] bin/smart-autoload-converter executable works
+- [ ] php bin/console smart:executable works
 - [ ] Fixture project converts successfully
 - [ ] No hardcoded paths in any source file

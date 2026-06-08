@@ -40,21 +40,23 @@ This project takes that proven codebase and makes it:
 | 07 | [Documentation](./07_DOCUMENTATION.md) | README, architecture docs, usage examples |
 | 08 | [GitHub and CI](./08_GITHUB_AND_CI.md) | GitHub Actions, release strategy, Packagist |
 | 09 | [Medium Article](./09_MEDIUM_ARTICLE.md) | Publication plan for the open-source announcement |
+| 10 | [Open Source Setup](./10_OPEN_SOURCE_SETUP.md) | License, contributing, CoC, security, release checklist |
 
 ---
 
 ## Implementation Phases
 
-| Phase | Title | Estimated Duration |
-|-------|-------|--------------------|
-| 1 | Anonymization + cleanup | 1 session |
-| 2 | DDD restructure + empty classes | 1 session |
-| 3 | Domain layer: Analysis + Conversion + Pipeline | 2-3 sessions |
-| 4 | Application layer: Services + CLI Commands | 1 session |
-| 5 | Unit tests with fixtures | 1-2 sessions |
-| 6 | Integration test (full conversion of fixture project) | 1 session |
-| 7 | Documentation + README + GitHub Actions CI | 1 session |
-| 8 | GitHub public release + Medium article | 1 session |
+| Phase | Title | Est. Days | Covered By |
+|-------|-------|-----------|------------|
+| 1 | Anonymization + cleanup | 1 day | 01_ANONYMIZATION |
+| 2 | DDD restructure + empty classes | 1 day | 02_DDD_ARCHITECTURE |
+| 3 | Domain layer (Analysis + Conversion + Pipeline) | 3-4 days | 02_DDD, 03_MODERNIZATION, 05_PIPELINE |
+| 4 | Application layer (Services + CLI Commands) | 1-2 days | 04_CLI_AND_CONFIGURATION |
+| 5 | Unit tests with fixture project | 2 days | 06_TESTING_STRATEGY |
+| 6 | Integration test (full end-to-end conversion) | 1 day | 06_TESTING_STRATEGY |
+| 7 | Documentation + README | 1 day | 07_DOCUMENTATION |
+| 8 | GitHub Actions CI/CD + open source setup | 1 day | 08_GITHUB_AND_CI, 10_OPEN_SOURCE_SETUP |
+| 9 | Packagist publication + Medium article | 1 day | 09_MEDIUM_ARTICLE |
 
 ---
 

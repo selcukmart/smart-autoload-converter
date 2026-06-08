@@ -5,3 +5,7 @@
 /.idea/
 /node_modules/
 *.cache
+.DS_Store
+phpunit.xml
+composer.phar
+/workspace/

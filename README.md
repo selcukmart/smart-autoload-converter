@@ -1,64 +1,149 @@
 # Smart Autoload Converter
 
-> Convert legacy PHP projects from include/require to PSR-4 autoloading automatically.
+[![PHP 8.1+](https://img.shields.io/badge/PHP-8.1%2B-blue.svg)](https://www.php.net/)
+[![Symfony 6.4](https://img.shields.io/badge/Symfony-6.4-black.svg)](https://symfony.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-**Status:** Planning phase. See [project_plans/](project_plans/) for the full project plan.
+Convert legacy PHP projects from `include/require` to **PSR-4 autoloading** — automatically.
 
-## Origin
+Born from a real migration of **6,669 PHP files**, **10,602 include/require statements**, and **4,087 class definitions** across a 1.6 million-line legacy codebase. Now open-sourced as a generic tool any PHP developer can use.
 
-This tool is based on a battle-tested AutoloadConverter that successfully migrated a 1.6 million line legacy PHP codebase (6,669 files, 10,602 include/require statements, 4,087 class definitions) to PSR-4 namespaces.
+## What It Does
 
-The original story is documented in a 4-part Medium series: [1.6 Million Lines, Zero Namespaces: A PHP Modernization War Story](https://medium.com/@martselcuk).
-
-## What This Will Do
-
-```php
-// BEFORE: legacy include/require spaghetti
-require_once dirname(__FILE__) . '/../include/MyLib_user_construct.php';
-require_once dirname(__FILE__) . '/../include/MyLib_market_list.php';
-
-$user = new MyLib_user_construct();
-$markets = MyLib_market_list::getAll();
-
-// AFTER: PSR-4 autoloading with namespaces
-namespace App\Pages;
-
-use MyLib\User\User;
-use MyLib\Market\MarketList;
-
-$user = new User();
-$markets = MarketList::getAll();
+```
+BEFORE                              AFTER
+├── include/                        ├── src/
+│   └── MyLib/                      │   └── MyLib/
+│       └── User/                   │       └── User/
+│           └── MyLib_user_construct.php    └── User.php ← namespaced
+│                                           namespace MyLib\User;
+include_once 'include/...';         use MyLib\User\User;
+$u = new MyLib_user_construct();    $u = new User();
 ```
 
-## Planned Tech Stack
+## Features
 
-- **PHP 8.5** with strict types, readonly classes, enums
-- **Symfony 7.4** Console commands as primary interface
-- **DDD architecture** with clean domain boundaries
-- **YAML configuration** for project-specific conversion rules
-- **Dry-run mode** for safe preview before conversion
-- **Full test coverage** with fixture-based integration tests
+- **8-step pipeline**: Analyze → Backup → Remove includes → Replace references → Rename files → Add namespaces → Update composer.json → Dump autoload
+- **Dry-run mode**: Preview all changes before applying
+- **10 regex patterns**: Handles `new`, `::`, `extends`, `implements`, `instanceof`, `catch`, function params, return types, and more
+- **Reserved word safety**: Automatically renames `Abstract` → `Abstracts`, `Interface` → `Interfaces`, etc.
+- **Duplicate name detection**: Flags classes with the same short name in different directories
+- **YAML configuration**: No hardcoded paths or project-specific logic
+- **Reports**: Console table, JSON, or HTML output
+- **Backup**: Zip or copy strategy before any changes
 
-## Project Plan
+## Quick Start
 
-| Document | Content |
-|----------|---------|
-| [00 Master Plan](project_plans/00_MASTER_PLAN.md) | Vision, phases, success criteria |
-| [01 Anonymization](project_plans/01_ANONYMIZATION.md) | Removing proprietary references |
-| [02 DDD Architecture](project_plans/02_DDD_ARCHITECTURE.md) | Domain structure, class mapping |
-| [03 Modernization](project_plans/03_MODERNIZATION.md) | PHP 8.5, Symfony 7.4, modern patterns |
-| [04 CLI and Configuration](project_plans/04_CLI_AND_CONFIGURATION.md) | Commands, YAML schema |
-| [05 Pipeline Design](project_plans/05_PIPELINE_DESIGN.md) | 8-step conversion pipeline |
-| [06 Testing Strategy](project_plans/06_TESTING_STRATEGY.md) | Unit, integration, fixtures |
-| [07 Documentation](project_plans/07_DOCUMENTATION.md) | README, architecture, examples |
-| [08 GitHub and CI](project_plans/08_GITHUB_AND_CI.md) | Actions, Packagist, releases |
-| [09 Medium Article](project_plans/09_MEDIUM_ARTICLE.md) | Publication plan |
-| [10 Open Source Setup](project_plans/10_OPEN_SOURCE_SETUP.md) | License, contributing, CoC, security |
+```bash
+# 1. Install
+composer require selcukmart/smart-autoload-converter
+
+# 2. Generate config
+php bin/console smart:init
+
+# 3. Analyze first (no changes)
+php bin/console smart:analyze -t ./my-legacy-project
+
+# 4. Dry-run (preview changes)
+php bin/console smart:convert -t ./my-legacy-project --dry-run
+
+# 5. Convert
+php bin/console smart:convert -t ./my-legacy-project -e ./converted
+```
+
+## Configuration
+
+```yaml
+# smart_autoload.yaml
+source:
+    path: './legacy-project'
+output:
+    path: './converted-project'
+
+class_naming:
+    separator: '_'
+    transforms:
+        construct: ''    # MyLib_user_construct → MyLib\User\User
+        index: ''        # MyLib_page_index → MyLib\Page\Page
+    reserved_word_fixes:
+        Abstract: Abstracts
+        Interface: Interfaces
+        List: Lists
+
+backup:
+    enabled: true
+    strategy: zip
+
+includes:
+    remove_class_includes: true
+    preserve:
+        - vendor/autoload.php
+
+pipeline:
+    stop_on_error: true
+```
+
+## Architecture
+
+Clean DDD architecture with clear separation of concerns:
+
+```
+src/
+├── Domain/
+│   ├── Analysis/       ClassAnalyzer, DependencyGraph, FileAnalysis
+│   ├── Conversion/     ClassNameTransformer, ClassReferenceReplacer, IncludeRemover
+│   ├── FileSystem/     FileScanner, FileWriter, BackupManager
+│   ├── Pipeline/       Pipeline engine + 8 configurable steps
+│   ├── Regex/          Battle-tested patterns (regex101 verified)
+│   └── Report/         ConversionReport + JSON/HTML/Console exporters
+├── Application/        CLI commands (smart:convert, smart:analyze, smart:init)
+└── Infrastructure/     ComposerJsonEditor, ComposerDumper, ConversionLogger
+```
+
+## Pipeline Steps
+
+| # | Step | What it does |
+|---|------|-------------|
+| 1 | `analyze` | Scans all PHP files, builds dependency graph, generates conversion rules |
+| 2 | `backup` | Creates zip/copy backup of the source project |
+| 3 | `remove_includes` | Removes include/require for class files (autoloading replaces them) |
+| 4 | `replace_references` | Updates all class usages: `new`, `extends`, `instanceof`, `::`, etc. |
+| 5 | `rename_files` | Moves files to PSR-4 directory structure |
+| 6 | `add_namespaces` | Adds `namespace` declarations and `use` statements |
+| 7 | `generate_composer` | Updates `composer.json` with PSR-4 autoload entries |
+| 8 | `composer_dump` | Runs `composer dump-autoload --optimize` |
+
+Run specific steps: `php bin/console smart:convert --steps=analyze,backup,remove_includes`
+
+## Commands
+
+| Command | Description |
+|---------|------------|
+| `smart:convert` | Run the full conversion pipeline |
+| `smart:analyze` | Analyze only (no file changes) |
+| `smart:init` | Generate example YAML config |
+
+## Testing
+
+```bash
+# Run all tests
+vendor/bin/phpunit
+
+# Run specific test suite
+vendor/bin/phpunit tests/Domain/
+vendor/bin/phpunit tests/Integration/
+```
+
+## Origin Story
+
+This tool was built in 2022 to modernize a real production PHP application with 1.6 million lines of code, zero namespaces, and thousands of `include_once` statements. The original tool (51 files, 5,226 lines) successfully converted the entire codebase in 2 months.
+
+Read the full story: [Medium: 1.6 Million Lines, Zero Namespaces](https://medium.com/@martselcuk)
 
 ## License
 
-MIT
+MIT License. See [LICENSE](LICENSE) for details.
 
 ## Author
 
-Selcuk Mart - [@martselcuk](https://medium.com/@martselcuk)
+**Selcuk Mart** — [GitHub](https://github.com/selcukmart) | [Medium](https://medium.com/@martselcuk)
