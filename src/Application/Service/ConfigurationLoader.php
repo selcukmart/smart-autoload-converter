@@ -14,10 +14,10 @@ class ConfigurationLoader
     private const REQUIRED_KEYS = ['source'];
 
     private const DEFAULTS = [
-        'source' => ['path' => './workspace/input'],
-        'output' => ['path' => './workspace/output'],
-        'backup' => ['enabled' => true, 'strategy' => 'zip', 'path' => './workspace/backups'],
-        'report' => ['enabled' => true, 'format' => 'console', 'path' => './workspace/reports'],
+        'source' => ['path' => '/workspace/input'],
+        'output' => ['path' => '/workspace/output'],
+        'backup' => ['enabled' => true, 'strategy' => 'zip', 'path' => '/workspace/backups'],
+        'report' => ['enabled' => true, 'format' => 'console', 'path' => '/workspace/reports'],
         'class_naming' => ['separator' => '_', 'transforms' => [], 'reserved_word_fixes' => [
             'Abstract' => 'Abstracts',
             'Interface' => 'Interfaces',

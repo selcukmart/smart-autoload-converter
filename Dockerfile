@@ -43,5 +43,9 @@ COPY --from=deps-dev /app/vendor /app/vendor
 COPY . .
 RUN composer dump-autoload --optimize
 
+# Prepare workspace with sample project so default commands work out of the box
+RUN mkdir -p /workspace/input /workspace/output /workspace/backups /workspace/reports \
+    && cp -r fixtures/legacy-sample-project/* /workspace/input/
+
 # Smoke test
 RUN php vendor/bin/phpunit --version

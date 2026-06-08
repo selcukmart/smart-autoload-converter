@@ -36,7 +36,7 @@ class AnalyzeCommand extends Command
     {
         $this
             ->addOption('config', 'c', InputOption::VALUE_OPTIONAL, 'Path to YAML config file')
-            ->addOption('target-path', 't', InputOption::VALUE_OPTIONAL, 'Path to legacy project', './workspace/input')
+            ->addOption('target-path', 't', InputOption::VALUE_OPTIONAL, 'Path to legacy project', '/workspace/input')
             ->addOption('format', 'f', InputOption::VALUE_OPTIONAL, 'Output format: table, json', 'table')
         ;
     }

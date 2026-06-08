@@ -28,8 +28,8 @@ class ConvertCommand extends Command
     {
         $this
             ->addOption('config', 'c', InputOption::VALUE_OPTIONAL, 'Path to YAML config file', null)
-            ->addOption('target-path', 't', InputOption::VALUE_OPTIONAL, 'Path to legacy project', './workspace/input')
-            ->addOption('export-path', null, InputOption::VALUE_OPTIONAL, 'Path for converted output', './workspace/output')
+            ->addOption('target-path', 't', InputOption::VALUE_OPTIONAL, 'Path to legacy project', '/workspace/input')
+            ->addOption('export-path', null, InputOption::VALUE_OPTIONAL, 'Path for converted output', '/workspace/output')
             ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Preview changes without applying')
             ->addOption('steps', 's', InputOption::VALUE_OPTIONAL, 'Comma-separated list of steps to run', null)
             ->addOption('report', 'r', InputOption::VALUE_OPTIONAL, 'Report format: json, html, console', 'console')

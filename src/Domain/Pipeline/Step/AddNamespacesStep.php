@@ -44,9 +44,12 @@ class AddNamespacesStep implements PipelineStepInterface
             // Determine the actual file path (may have been moved by RenameFilesStep)
             $filePath = $rule->newFilePath ?: $rule->oldFilePath;
 
+            // Try context cache first (both new and old paths), then read from disk
+            // In dry-run mode, files stay at old path since RenameFilesStep doesn't actually move them
             $content = $context->getFileContent($filePath)
                 ?? $context->getFileContent($rule->oldFilePath)
-                ?? $this->fileWriter->read($filePath);
+                ?? (is_file($filePath) ? $this->fileWriter->read($filePath) : null)
+                ?? $this->fileWriter->read($rule->oldFilePath);
 
             // 1. Rename the class definition in the file
             $content = $this->renameClassDefinition($content, $rule->oldClassName, $rule->newClassName);

@@ -47,21 +47,21 @@ test:
 test-coverage:
 	$(PHP) vendor/bin/phpunit --colors=always
 
-## Run analysis on a legacy project (put it in workspace/input/)
+## Run analysis on /workspace/input (default: sample legacy project)
 analyze:
-	$(PHP) bin/console smart:analyze -t /workspace/input
+	$(PHP) bin/console smart:analyze
 
-## Dry-run conversion (preview only)
+## Dry-run conversion (preview only, no file changes)
 dry-run:
-	$(PHP) bin/console smart:convert -t /workspace/input --export-path=/workspace/output --dry-run
+	$(PHP) bin/console smart:convert --dry-run
 
 ## Run full conversion
 convert:
-	$(PHP) bin/console smart:convert -t /workspace/input --export-path=/workspace/output
+	$(PHP) bin/console smart:convert
 
 ## Generate example config
 init:
-	$(PHP) bin/console smart:init -o /workspace/smart_autoload.yaml
+	$(PHP) bin/console smart:init
 
 ## Open a shell inside the app container
 shell:

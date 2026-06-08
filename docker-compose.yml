@@ -10,7 +10,7 @@ services:
     volumes:
       - .:/app
       - vendor:/app/vendor
-      - ./workspace:/workspace
+      - workspace:/workspace
       - composer-cache:/root/.composer/cache
     working_dir: /app
     command: ["sleep", "infinity"]
@@ -20,4 +20,5 @@ services:
 
 volumes:
   vendor:
+  workspace:
   composer-cache:
